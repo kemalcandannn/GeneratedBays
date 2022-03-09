@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import tr.bays.dto.kullanici.KullaniciDto;
-import tr.bays.service.kullanici.KullaniciService;
+import tr.bays.dto.KullaniciDto;
+import tr.bays.service.KullaniciService;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
