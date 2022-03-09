@@ -8,5 +8,4 @@ import lombok.Data;
 @Data
 public abstract class BaseDto implements Serializable {
 	private Long id;
-	private Long version;
 }
