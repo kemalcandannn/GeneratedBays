@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.depo}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.depo}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="depo_form">
+					<algan:detayliArama	form="depo_form" 
+										clearAction="#{depoController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ad}" 
+											value="#{depoController.sorguKriteri.ad}" 
+											/>
+
+						<p:outputLabel value="#{labels.kisaltma}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.kisaltma}" 
+											value="#{depoController.sorguKriteri.kisaltma}" 
+											/>
+
+						<p:outputLabel value="#{labels.aciklama}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.aciklama}" 
+											value="#{depoController.sorguKriteri.aciklama}" 
+											/>
+
+						<p:outputLabel value="#{labels.aktif}" styleClass="koyu" />
+						<algan:store	value="#{depoController.sorguKriteri.aktif}" 
+										store="#{storeController.aktifStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.kapasite}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.kapasite}" 
+											value="#{depoController.sorguKriteri.kapasite}" 
+											/>
+
+						<p:outputLabel value="#{labels.calisma_gozu}" styleClass="koyu" />
+						<algan:store	value="#{depoController.sorguKriteri.calisma_gozu}" 
+										store="#{storeController.calismaGozuStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.tasnifsiz_malzeme_sayisi}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.tasnifsiz_malzeme_sayisi}" 
+											value="#{depoController.sorguKriteri.tasnifsiz_malzeme_sayisi}" 
+											/>
+						<p:outputLabel value="#{labels.arsiv_kurumu_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{depoController.sorguKriteri.arsiv_kurumu_id}"
+											method="#{depoController.autoComplete}"
+											listItem="depo"
+											listItemValue="#{depo}"
+											listItemLabel="#{depo.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.ust_depo_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{depoController.sorguKriteri.ust_depo_id}"
+											method="#{depoController.autoComplete}"
+											listItem="depo"
+											listItemValue="#{depo}"
+											listItemLabel="#{depo.ad}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="depoListesi" 
+											widgetVar="depoWidget" 
+											value="#{depoController.list}" 
+											selection="#{depoController.secilenListesi}" 
+											rowSelectUpdate="depo_form:tablo_panel" 
+											cellEditAction="#{depoController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{depoController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('depo_ekle')}" 
+																oncomplete="PF('depo_islem_dialog').show()" 
+																update="depo_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{depoController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(depoController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{depoController.sil}" 
+															rendered="#{sessionController.yetkiliMi('depo_sil')}" 
+															disabled="#{depoController.secilenListesi == null or depoController.secilenListesi.size() == 0}" 
+															update="depo_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{depoController.list.sorgu}" 
+																			placeholder="#{labels.ad} | #{labels.kisaltma} | #{labels.aciklama} | "
+																			clearAction="#{depoController.formTemizle}" 
+																			update="depo_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{depoController.listele}" 
+														update="depo_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="depoListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.ad}"
+								sortBy="#{item.ad}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ad}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ad}" 
+														value="#{item.ad}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.kisaltma}"
+								sortBy="#{item.kisaltma}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.kisaltma}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.kisaltma}" 
+														value="#{item.kisaltma}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kisaltma, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.aciklama}"
+								sortBy="#{item.aciklama}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.aciklama}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.aciklama}" 
+														value="#{item.aciklama}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.aciklama, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.aktif}" sortBy="#{item.aktif}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.aktifStore, item.aktif)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.aktif}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.aktif, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.aktifStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.kapasite}"
+								sortBy="#{item.kapasite}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.kapasite}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.kapasite}" 
+														value="#{item.kapasite}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kapasite, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.calisma_gozu}" sortBy="#{item.calisma_gozu}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.calismaGozuStore, item.calisma_gozu)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.calisma_gozu}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.calisma_gozu, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.calismaGozuStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.tasnifsiz_malzeme_sayisi}"
+								sortBy="#{item.tasnifsiz_malzeme_sayisi}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.tasnifsiz_malzeme_sayisi}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.tasnifsiz_malzeme_sayisi}" 
+														value="#{item.tasnifsiz_malzeme_sayisi}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tasnifsiz_malzeme_sayisi, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.arsiv_kurumu_id}" sortBy="#{item.arsiv_kurumu_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.arsiv_kurumu_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.arsiv_kurumu_id}"
+														value="#{item.arsiv_kurumu_id}" 
+														completeMethod="#{depoController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.arsiv_kurumu_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.ust_depo_id}" sortBy="#{item.ust_depo_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ust_depo_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.ust_depo_id}"
+														value="#{item.ust_depo_id}" 
+														completeMethod="#{depoController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ust_depo_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="depoListesi:depoListesi" 
+										widgetVar="depoListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{depoController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('depo_guncelle')}" 
+										oncomplete="PF('depo_islem_dialog').show()" 
+										update="depo_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{depoController.sil}" 
+										rendered="#{sessionController.yetkiliMi('depo_sil')}" 
+										update="depo_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{depoController.listeBosalt()}" 
+										oncomplete="PF('depoListesiContextMenu').hide()" 
+										update="depo_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="depo_islem_dialog" 
+								header="#{labels.depo}" 
+								height="260"
+								widgetVar="depo_islem_dialog" 
+								iptalAction="#{depoController.iptal}" 
+								iptalUpdate="depo_form:tablo_panel" 
+								kaydetAction="#{depoController.kaydet('depo_islem_dialog')}" 
+								kaydetUpdate="depo_form,messages">
+
+					<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ad}" 
+										value="#{depoController.secilen.ad}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.kisaltma}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.kisaltma}" 
+										value="#{depoController.secilen.kisaltma}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kisaltma, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.aciklama}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.aciklama}" 
+										value="#{depoController.secilen.aciklama}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.aciklama, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.aktif}" styleClass="koyu" />
+					<algan:store	value="#{depoController.secilen.aktif}" 
+									store="#{storeController.aktifStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.aktif, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.kapasite}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.kapasite}" 
+										value="#{depoController.secilen.kapasite}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kapasite, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.calisma_gozu}" styleClass="koyu" />
+					<algan:store	value="#{depoController.secilen.calisma_gozu}" 
+									store="#{storeController.calismaGozuStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.calisma_gozu, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.tasnifsiz_malzeme_sayisi}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.tasnifsiz_malzeme_sayisi}" 
+										value="#{depoController.secilen.tasnifsiz_malzeme_sayisi}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tasnifsiz_malzeme_sayisi, labels.zorunlu_alan_mesaji)}"
+										/>
+					<p:outputLabel value="#{labels.arsiv_kurumu_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{depoController.sorguKriteri.arsiv_kurumu_id}"
+										method="#{depoController.autoComplete}"
+										listItem="depo"
+										listItemValue="#{depo}"
+										listItemLabel="#{depo.ad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.arsiv_kurumu_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.ust_depo_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{depoController.sorguKriteri.ust_depo_id}"
+										method="#{depoController.autoComplete}"
+										listItem="depo"
+										listItemValue="#{depo}"
+										listItemLabel="#{depo.ad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ust_depo_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

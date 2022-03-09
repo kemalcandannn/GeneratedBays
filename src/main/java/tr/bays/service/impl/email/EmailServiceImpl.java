@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
-import tr.bays.dto.KullaniciDto;
+import tr.bays.dto.teskilat.KullaniciDto;
 import tr.bays.service.email.EmailService;
 import util.KutukIslemleri;
 

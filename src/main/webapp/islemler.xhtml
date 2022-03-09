@@ -22,13 +22,61 @@
 
 		<p:panelGrid layout="grid" columns="7" styleClass="showcase-text-align-center">
 			<p:menu styleClass="islemMenuStyle" toggleable="true" rendered="#{true}">
-				<p:menuitem value="#{labels.kullanici}" icon="fa fa-fw fa-columns" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-				<p:menuitem value="#{labels.fon_islemleri}" icon="fa fa-fw fa-columns" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-				<p:menuitem value="#{labels.dosya_transfer}" icon="fa fa-fw fa-columns" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-				<p:menuitem value="#{labels.goruntu_kontrolu}" icon="fa fa-fw fa-columns" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-				<p:menuitem value="#{labels.esatis_belgeleri}" icon="fa fa-fw fa-columns" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-				<p:menuitem value="#{labels.raporlama}" icon="fa fa-fw fa-columns" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-				<p:menuitem value="#{labels.ayarlar}" icon="fa fa-fw fa-columns" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.db_log}" icon="pi pi-desktop" outcome="/sistem/dbLogCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.birim}" icon="pi pi-desktop" outcome="/teskilat/birimCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.kullanici}" icon="pi pi-desktop" outcome="/teskilat/kullaniciCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.depo}" icon="pi pi-desktop" outcome="/depo/depoCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.klasor_tarihce_log}" icon="pi pi-desktop" outcome="/loglama/klasorTarihceLogCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.gomlek}" icon="pi pi-desktop" outcome="/gomlek/gomlekCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.defter}" icon="pi pi-desktop" outcome="/defter/defterCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.gomlek_tarihce_log}" icon="pi pi-desktop" outcome="/loglama/gomlekTarihceLogCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.defter_tarihce_log}" icon="pi pi-desktop" outcome="/loglama/defterTarihceLogCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.defter_sayfa_tarihce_log}" icon="pi pi-desktop" outcome="/loglama/defterSayfaTarihceLogCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.defter_alan}" icon="pi pi-desktop" outcome="/defter/defterAlanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.defter_sayfa_alan}" icon="pi pi-desktop" outcome="/defter/defterSayfaAlanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.arsiv_materyali_alan}" icon="pi pi-desktop" outcome="/arsivMateryali/arsivMateryaliAlanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.arsiv_materyali}" icon="pi pi-desktop" outcome="/arsivMateryali/arsivMateryaliCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.depo_talep}" icon="pi pi-desktop" outcome="/depoTalep/depoTalepCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.depo_talep_tarihce_log}" icon="pi pi-desktop" outcome="/depoTalep/depoTalepTarihceLogCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.depo_kullanici}" icon="pi pi-desktop" outcome="/depo/depoKullaniciCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.toplu_tasima}" icon="pi pi-desktop" outcome="/depoMuhafaza/topluTasimaCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.ham_evrak_birim}" icon="pi pi-desktop" outcome="/hamEvrak/hamEvrakBirimCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.arsiv_kurumu}" icon="pi pi-desktop" outcome="/teskilat/arsivKurumuCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.arsiv_kurumu_alan}" icon="pi pi-desktop" outcome="/teskilat/arsivKurumuAlanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.fon}" icon="pi pi-desktop" outcome="/fon/fonCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.rol}" icon="pi pi-desktop" outcome="/genel/rolCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.rol_islem}" icon="pi pi-desktop" outcome="/genel/rolIslemCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.kullanici_rol}" icon="pi pi-desktop" outcome="/teskilat/kullaniciRolCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.islem}" icon="pi pi-desktop" outcome="/genel/islemCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.sozluk}" icon="pi pi-desktop" outcome="/sozluk/sozlukCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.sozluk_madde}" icon="pi pi-desktop" outcome="/sozluk/sozlukMaddeCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.arsiv_sahibi_personel_onay_log}" icon="pi pi-desktop" outcome="/loglama/arsivSahibiPersonelOnayLogCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.fon_oncul_veri_log}" icon="pi pi-desktop" outcome="/fon/fonOnculVeriLogCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.gomlek_bakim}" icon="pi pi-desktop" outcome="/depoMuhafaza/gomlekBakimCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.calisma_grubu_uye}" icon="pi pi-desktop" outcome="/calismaGrubu/calismaGrubuUyeCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.depo_ici_tasima}" icon="pi pi-desktop" outcome="/hamEvrak/depoIciTasimaCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.kullanici_hesap}" icon="pi pi-desktop" outcome="/teskilat/kullaniciHesapCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.metadata_seti}" icon="pi pi-desktop" outcome="/metadata/metadataSetiCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.alan}" icon="pi pi-desktop" outcome="/metadata/alanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.fon_metadata_seti}" icon="pi pi-desktop" outcome="/fon/fonMetadataSetiCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.fon_alan}" icon="pi pi-desktop" outcome="/fon/fonAlanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.klasor_alan}" icon="pi pi-desktop" outcome="/klasor/klasorAlanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.gomlek_alan}" icon="pi pi-desktop" outcome="/gomlek/gomlekAlanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.islenmemis_klasor_alan}" icon="pi pi-desktop" outcome="/arsivMateryali/islenmemisKlasorAlanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.depo_alan}" icon="pi pi-desktop" outcome="/depo/depoAlanCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.arsiv_sahibi}" icon="pi pi-desktop" outcome="/arsivSahibi/arsivSahibiCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.arsiv_sahibi_personel}" icon="pi pi-desktop" outcome="/arsivSahibi/arsivSahibiPersonelCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.personel_hesap_bilgileri}" icon="pi pi-desktop" outcome="/arsivSahibi/personelHesapBilgileriCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.klasor}" icon="pi pi-desktop" outcome="/klasor/klasorCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.islenmemis_klasor}" icon="pi pi-desktop" outcome="/arsivMateryali/islenmemisKlasorCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.calisma_grubu}" icon="pi pi-desktop" outcome="/calismaGrubu/calismaGrubuCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.ham_evrak}" icon="pi pi-desktop" outcome="/hamEvrak/hamEvrakCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.klasor_envanter}" icon="pi pi-desktop" outcome="/klasor/klasorEnvanterCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.depo_talep_malzeme}" icon="pi pi-desktop" outcome="/depoTalep/depoTalepMalzemeCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.toplu_tasima_malzeme}" icon="pi pi-desktop" outcome="/depoMuhafaza/topluTasimaMalzemeCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.gomlek_bakim_klasor}" icon="pi pi-desktop" outcome="/depoMuhafaza/gomlekBakimKlasorCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.gomlek_envanter}" icon="pi pi-desktop" outcome="/gomlek/gomlekEnvanterCrud" rendered="#{true}" />
+				<p:menuitem value="#{labels.defter_sayfa}" icon="pi pi-desktop" outcome="/defter/defterSayfaCrud" rendered="#{true}" />
 			</p:menu>
 		</p:panelGrid>
 	</ui:define>

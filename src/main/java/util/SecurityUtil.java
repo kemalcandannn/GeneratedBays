@@ -3,8 +3,9 @@ package util;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import tr.bays.dto.KullaniciDto;
-import tr.bays.service.KullaniciService;
+import tr.bays.dto.teskilat.KullaniciDto;
+import tr.bays.service.teskilat.KullaniciService;
+
 
 public class SecurityUtil {
 	

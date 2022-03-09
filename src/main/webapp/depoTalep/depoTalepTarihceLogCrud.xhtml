@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.depoTalepTarihceLog}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.depoTalepTarihceLog}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="depoTalepTarihceLog_form">
+					<algan:detayliArama	form="depoTalepTarihceLog_form" 
+										clearAction="#{depoTalepTarihceLogController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+						<algan:store	value="#{depoTalepTarihceLogController.sorguKriteri.tur}" 
+										store="#{storeController.depoTaleptarihceLogTurStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.tarih_saat}" styleClass="koyu" />
+						<algan:tarih	placeholder="#{labels.tarih_saat}" 
+										value="#{depoTalepTarihceLogController.sorguKriteri.tarih_saat}" 
+										/>
+
+						<p:outputLabel value="#{labels.ip}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ip}" 
+											value="#{depoTalepTarihceLogController.sorguKriteri.ip}" 
+											/>
+
+						<p:outputLabel value="#{labels.sebep}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.sebep}" 
+											value="#{depoTalepTarihceLogController.sorguKriteri.sebep}" 
+											/>
+						<p:outputLabel value="#{labels.iptal_red_sebebi_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{depoTalepTarihceLogController.sorguKriteri.iptal_red_sebebi_id}"
+											method="#{depoTalepTarihceLogController.autoComplete}"
+											listItem="depoTalepTarihceLog"
+											listItemValue="#{depoTalepTarihceLog}"
+											listItemLabel="#{depoTalepTarihceLog.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.depo_sorumlusu_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{depoTalepTarihceLogController.sorguKriteri.depo_sorumlusu_id}"
+											method="#{depoTalepTarihceLogController.autoComplete}"
+											listItem="depoTalepTarihceLog"
+											listItemValue="#{depoTalepTarihceLog}"
+											listItemLabel="#{depoTalepTarihceLog.ad_soyad}"
+											/>
+
+						<p:outputLabel value="#{labels.birim_sorumlusu_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{depoTalepTarihceLogController.sorguKriteri.birim_sorumlusu_id}"
+											method="#{depoTalepTarihceLogController.autoComplete}"
+											listItem="depoTalepTarihceLog"
+											listItemValue="#{depoTalepTarihceLog}"
+											listItemLabel="#{depoTalepTarihceLog.ad_soyad}"
+											/>
+
+						<p:outputLabel value="#{labels.depo_talep_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{depoTalepTarihceLogController.sorguKriteri.depo_talep_id}"
+											method="#{depoTalepTarihceLogController.autoComplete}"
+											listItem="depoTalepTarihceLog"
+											listItemValue="#{depoTalepTarihceLog}"
+											listItemLabel="#{depoTalepTarihceLog.tarih_saat}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="depoTalepTarihceLogListesi" 
+											widgetVar="depoTalepTarihceLogWidget" 
+											value="#{depoTalepTarihceLogController.list}" 
+											selection="#{depoTalepTarihceLogController.secilenListesi}" 
+											rowSelectUpdate="depoTalepTarihceLog_form:tablo_panel" 
+											cellEditAction="#{depoTalepTarihceLogController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{depoTalepTarihceLogController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('depoTalepTarihceLog_ekle')}" 
+																oncomplete="PF('depoTalepTarihceLog_islem_dialog').show()" 
+																update="depoTalepTarihceLog_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{depoTalepTarihceLogController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(depoTalepTarihceLogController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{depoTalepTarihceLogController.sil}" 
+															rendered="#{sessionController.yetkiliMi('depoTalepTarihceLog_sil')}" 
+															disabled="#{depoTalepTarihceLogController.secilenListesi == null or depoTalepTarihceLogController.secilenListesi.size() == 0}" 
+															update="depoTalepTarihceLog_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{depoTalepTarihceLogController.list.sorgu}" 
+																			placeholder="#{labels.ip} | #{labels.sebep}"
+																			clearAction="#{depoTalepTarihceLogController.formTemizle}" 
+																			update="depoTalepTarihceLog_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{depoTalepTarihceLogController.listele}" 
+														update="depoTalepTarihceLog_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="depoTalepTarihceLogListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.tur}" sortBy="#{item.tur}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.depoTaleptarihceLogTurStore, item.tur)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.tur}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.depoTaleptarihceLogTurStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.tarih_saat}" sortBy="#{item.tarih_saat}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.tarih_saat}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar	placeholder="#{labels.tarih_saat}" 
+													value="#{item.tarih_saat}" 
+													locale="tr" 
+													lang="tr" 
+													pattern="dd/MM/yyyy" 
+													mask="#{true}" 
+													converterMessage="#{labels.tarih_format_uyarisi}" 
+													validatorMessage="#{labels.tarih_kosul_uyarisi}" 
+													readonlyInput="#{false}" 
+															required="true"
+													requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih_saat, labels.zorunlu_alan_mesaji)}" 
+													/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ip}"
+								sortBy="#{item.ip}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ip}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ip}" 
+														value="#{item.ip}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ip, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.sebep}"
+								sortBy="#{item.sebep}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.sebep}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.sebep}" 
+														value="#{item.sebep}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.sebep, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.iptal_red_sebebi_id}" sortBy="#{item.iptal_red_sebebi_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.iptal_red_sebebi_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.iptal_red_sebebi_id}"
+														value="#{item.iptal_red_sebebi_id}" 
+														completeMethod="#{depoTalepTarihceLogController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.iptal_red_sebebi_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.depo_sorumlusu_id}" sortBy="#{item.depo_sorumlusu_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.depo_sorumlusu_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.depo_sorumlusu_id}"
+														value="#{item.depo_sorumlusu_id}" 
+														completeMethod="#{depoTalepTarihceLogController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad_soyad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_sorumlusu_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.birim_sorumlusu_id}" sortBy="#{item.birim_sorumlusu_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.birim_sorumlusu_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.birim_sorumlusu_id}"
+														value="#{item.birim_sorumlusu_id}" 
+														completeMethod="#{depoTalepTarihceLogController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad_soyad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.birim_sorumlusu_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.depo_talep_id}" sortBy="#{item.depo_talep_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.depo_talep_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.depo_talep_id}"
+														value="#{item.depo_talep_id}" 
+														completeMethod="#{depoTalepTarihceLogController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.tarih_saat}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_talep_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="depoTalepTarihceLogListesi:depoTalepTarihceLogListesi" 
+										widgetVar="depoTalepTarihceLogListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{depoTalepTarihceLogController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('depoTalepTarihceLog_guncelle')}" 
+										oncomplete="PF('depoTalepTarihceLog_islem_dialog').show()" 
+										update="depoTalepTarihceLog_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{depoTalepTarihceLogController.sil}" 
+										rendered="#{sessionController.yetkiliMi('depoTalepTarihceLog_sil')}" 
+										update="depoTalepTarihceLog_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{depoTalepTarihceLogController.listeBosalt()}" 
+										oncomplete="PF('depoTalepTarihceLogListesiContextMenu').hide()" 
+										update="depoTalepTarihceLog_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="depoTalepTarihceLog_islem_dialog" 
+								header="#{labels.depoTalepTarihceLog}" 
+								height="260"
+								widgetVar="depoTalepTarihceLog_islem_dialog" 
+								iptalAction="#{depoTalepTarihceLogController.iptal}" 
+								iptalUpdate="depoTalepTarihceLog_form:tablo_panel" 
+								kaydetAction="#{depoTalepTarihceLogController.kaydet('depoTalepTarihceLog_islem_dialog')}" 
+								kaydetUpdate="depoTalepTarihceLog_form,messages">
+
+					<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+					<algan:store	value="#{depoTalepTarihceLogController.secilen.tur}" 
+									store="#{storeController.depoTaleptarihceLogTurStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.tarih_saat}" styleClass="koyu" />
+					<algan:tarih	placeholder="#{labels.tarih_saat}" 
+									value="#{depoTalepTarihceLogController.secilen.tarih_saat}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih_saat, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.ip}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ip}" 
+										value="#{depoTalepTarihceLogController.secilen.ip}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ip, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.sebep}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.sebep}" 
+										value="#{depoTalepTarihceLogController.secilen.sebep}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.sebep, labels.zorunlu_alan_mesaji)}"
+										/>
+					<p:outputLabel value="#{labels.iptal_red_sebebi_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{depoTalepTarihceLogController.sorguKriteri.iptal_red_sebebi_id}"
+										method="#{depoTalepTarihceLogController.autoComplete}"
+										listItem="depoTalepTarihceLog"
+										listItemValue="#{depoTalepTarihceLog}"
+										listItemLabel="#{depoTalepTarihceLog.ad}"
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.iptal_red_sebebi_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.depo_sorumlusu_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{depoTalepTarihceLogController.sorguKriteri.depo_sorumlusu_id}"
+										method="#{depoTalepTarihceLogController.autoComplete}"
+										listItem="depoTalepTarihceLog"
+										listItemValue="#{depoTalepTarihceLog}"
+										listItemLabel="#{depoTalepTarihceLog.ad_soyad}"
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_sorumlusu_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.birim_sorumlusu_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{depoTalepTarihceLogController.sorguKriteri.birim_sorumlusu_id}"
+										method="#{depoTalepTarihceLogController.autoComplete}"
+										listItem="depoTalepTarihceLog"
+										listItemValue="#{depoTalepTarihceLog}"
+										listItemLabel="#{depoTalepTarihceLog.ad_soyad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.birim_sorumlusu_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.depo_talep_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{depoTalepTarihceLogController.sorguKriteri.depo_talep_id}"
+										method="#{depoTalepTarihceLogController.autoComplete}"
+										listItem="depoTalepTarihceLog"
+										listItemValue="#{depoTalepTarihceLog}"
+										listItemLabel="#{depoTalepTarihceLog.tarih_saat}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_talep_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

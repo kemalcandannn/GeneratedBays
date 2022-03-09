@@ -20,8 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
-import tr.bays.dto.KullaniciDto;
-import tr.bays.service.KullaniciService;
+import tr.bays.dto.teskilat.KullaniciDto;
+import tr.bays.service.teskilat.KullaniciService;
 import util.Util;
 
 @Component

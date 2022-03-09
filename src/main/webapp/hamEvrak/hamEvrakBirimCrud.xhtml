@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.hamEvrakBirim}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.hamEvrakBirim}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="hamEvrakBirim_form">
+					<algan:detayliArama	form="hamEvrakBirim_form" 
+										clearAction="#{hamEvrakBirimController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.yon}" styleClass="koyu" />
+						<algan:store	value="#{hamEvrakBirimController.sorguKriteri.yon}" 
+										store="#{storeController.hamEvrakBirimYonStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.adet}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.adet}" 
+											value="#{hamEvrakBirimController.sorguKriteri.adet}" 
+											/>
+
+						<p:outputLabel value="#{labels.saklanma_turu}" styleClass="koyu" />
+						<algan:store	value="#{hamEvrakBirimController.sorguKriteri.saklanma_turu}" 
+										store="#{storeController.hamEvrakSaklanmaTuruStore}" 
+										/>
+						<p:outputLabel value="#{labels.birim_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.birim_id}"
+											method="#{hamEvrakBirimController.autoComplete}"
+											listItem="hamEvrakBirim"
+											listItemValue="#{hamEvrakBirim}"
+											listItemLabel="#{hamEvrakBirim.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.depo_sorumlusu_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.depo_sorumlusu_id}"
+											method="#{hamEvrakBirimController.autoComplete}"
+											listItem="hamEvrakBirim"
+											listItemValue="#{hamEvrakBirim}"
+											listItemLabel="#{hamEvrakBirim.ad_soyad}"
+											/>
+
+						<p:outputLabel value="#{labels.birim_sorumlusu_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.birim_sorumlusu_id}"
+											method="#{hamEvrakBirimController.autoComplete}"
+											listItem="hamEvrakBirim"
+											listItemValue="#{hamEvrakBirim}"
+											listItemLabel="#{hamEvrakBirim.ad_soyad}"
+											/>
+
+						<p:outputLabel value="#{labels.fon_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.fon_id}"
+											method="#{hamEvrakBirimController.autoComplete}"
+											listItem="hamEvrakBirim"
+											listItemValue="#{hamEvrakBirim}"
+											listItemLabel="#{hamEvrakBirim.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.ham_evrak_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.ham_evrak_id}"
+											method="#{hamEvrakBirimController.autoComplete}"
+											listItem="hamEvrakBirim"
+											listItemValue="#{hamEvrakBirim}"
+											listItemLabel="#{hamEvrakBirim.saklanma_turu}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="hamEvrakBirimListesi" 
+											widgetVar="hamEvrakBirimWidget" 
+											value="#{hamEvrakBirimController.list}" 
+											selection="#{hamEvrakBirimController.secilenListesi}" 
+											rowSelectUpdate="hamEvrakBirim_form:tablo_panel" 
+											cellEditAction="#{hamEvrakBirimController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{hamEvrakBirimController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('hamEvrakBirim_ekle')}" 
+																oncomplete="PF('hamEvrakBirim_islem_dialog').show()" 
+																update="hamEvrakBirim_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{hamEvrakBirimController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(hamEvrakBirimController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{hamEvrakBirimController.sil}" 
+															rendered="#{sessionController.yetkiliMi('hamEvrakBirim_sil')}" 
+															disabled="#{hamEvrakBirimController.secilenListesi == null or hamEvrakBirimController.secilenListesi.size() == 0}" 
+															update="hamEvrakBirim_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{hamEvrakBirimController.list.sorgu}" 
+																			clearAction="#{hamEvrakBirimController.formTemizle}" 
+																			update="hamEvrakBirim_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{hamEvrakBirimController.listele}" 
+														update="hamEvrakBirim_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="hamEvrakBirimListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.yon}" sortBy="#{item.yon}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.hamEvrakBirimYonStore, item.yon)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.yon}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.yon, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.hamEvrakBirimYonStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.adet}"
+								sortBy="#{item.adet}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.adet}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.adet}" 
+														value="#{item.adet}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.adet, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.saklanma_turu}" sortBy="#{item.saklanma_turu}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.hamEvrakSaklanmaTuruStore, item.saklanma_turu)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.saklanma_turu}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.saklanma_turu, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.hamEvrakSaklanmaTuruStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.birim_id}" sortBy="#{item.birim_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.birim_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.birim_id}"
+														value="#{item.birim_id}" 
+														completeMethod="#{hamEvrakBirimController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.birim_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.depo_sorumlusu_id}" sortBy="#{item.depo_sorumlusu_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.depo_sorumlusu_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.depo_sorumlusu_id}"
+														value="#{item.depo_sorumlusu_id}" 
+														completeMethod="#{hamEvrakBirimController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad_soyad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_sorumlusu_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.birim_sorumlusu_id}" sortBy="#{item.birim_sorumlusu_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.birim_sorumlusu_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.birim_sorumlusu_id}"
+														value="#{item.birim_sorumlusu_id}" 
+														completeMethod="#{hamEvrakBirimController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad_soyad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.birim_sorumlusu_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.fon_id}" sortBy="#{item.fon_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.fon_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.fon_id}"
+														value="#{item.fon_id}" 
+														completeMethod="#{hamEvrakBirimController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.fon_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.ham_evrak_id}" sortBy="#{item.ham_evrak_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ham_evrak_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.ham_evrak_id}"
+														value="#{item.ham_evrak_id}" 
+														completeMethod="#{hamEvrakBirimController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.saklanma_turu}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ham_evrak_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="hamEvrakBirimListesi:hamEvrakBirimListesi" 
+										widgetVar="hamEvrakBirimListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{hamEvrakBirimController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('hamEvrakBirim_guncelle')}" 
+										oncomplete="PF('hamEvrakBirim_islem_dialog').show()" 
+										update="hamEvrakBirim_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{hamEvrakBirimController.sil}" 
+										rendered="#{sessionController.yetkiliMi('hamEvrakBirim_sil')}" 
+										update="hamEvrakBirim_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{hamEvrakBirimController.listeBosalt()}" 
+										oncomplete="PF('hamEvrakBirimListesiContextMenu').hide()" 
+										update="hamEvrakBirim_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="hamEvrakBirim_islem_dialog" 
+								header="#{labels.hamEvrakBirim}" 
+								height="260"
+								widgetVar="hamEvrakBirim_islem_dialog" 
+								iptalAction="#{hamEvrakBirimController.iptal}" 
+								iptalUpdate="hamEvrakBirim_form:tablo_panel" 
+								kaydetAction="#{hamEvrakBirimController.kaydet('hamEvrakBirim_islem_dialog')}" 
+								kaydetUpdate="hamEvrakBirim_form,messages">
+
+					<p:outputLabel value="#{labels.yon}" styleClass="koyu" />
+					<algan:store	value="#{hamEvrakBirimController.secilen.yon}" 
+									store="#{storeController.hamEvrakBirimYonStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.yon, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.adet}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.adet}" 
+										value="#{hamEvrakBirimController.secilen.adet}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.adet, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.saklanma_turu}" styleClass="koyu" />
+					<algan:store	value="#{hamEvrakBirimController.secilen.saklanma_turu}" 
+									store="#{storeController.hamEvrakSaklanmaTuruStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.saklanma_turu, labels.zorunlu_alan_mesaji)}"
+									/>
+					<p:outputLabel value="#{labels.birim_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.birim_id}"
+										method="#{hamEvrakBirimController.autoComplete}"
+										listItem="hamEvrakBirim"
+										listItemValue="#{hamEvrakBirim}"
+										listItemLabel="#{hamEvrakBirim.ad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.birim_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.depo_sorumlusu_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.depo_sorumlusu_id}"
+										method="#{hamEvrakBirimController.autoComplete}"
+										listItem="hamEvrakBirim"
+										listItemValue="#{hamEvrakBirim}"
+										listItemLabel="#{hamEvrakBirim.ad_soyad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_sorumlusu_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.birim_sorumlusu_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.birim_sorumlusu_id}"
+										method="#{hamEvrakBirimController.autoComplete}"
+										listItem="hamEvrakBirim"
+										listItemValue="#{hamEvrakBirim}"
+										listItemLabel="#{hamEvrakBirim.ad_soyad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.birim_sorumlusu_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.fon_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.fon_id}"
+										method="#{hamEvrakBirimController.autoComplete}"
+										listItem="hamEvrakBirim"
+										listItemValue="#{hamEvrakBirim}"
+										listItemLabel="#{hamEvrakBirim.ad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.fon_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.ham_evrak_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{hamEvrakBirimController.sorguKriteri.ham_evrak_id}"
+										method="#{hamEvrakBirimController.autoComplete}"
+										listItem="hamEvrakBirim"
+										listItemValue="#{hamEvrakBirim}"
+										listItemLabel="#{hamEvrakBirim.saklanma_turu}"
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ham_evrak_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

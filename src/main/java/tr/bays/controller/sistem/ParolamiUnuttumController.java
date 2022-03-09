@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import tr.bays.BaysJsfController;
 import tr.bays.common.base.BaseCrudController;
-import tr.bays.dto.KullaniciDto;
-import tr.bays.service.KullaniciService;
+import tr.bays.dto.teskilat.KullaniciDto;
+import tr.bays.service.teskilat.KullaniciService;
 
 @BaysJsfController
 @Data

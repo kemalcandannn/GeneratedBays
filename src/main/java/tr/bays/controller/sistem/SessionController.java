@@ -16,8 +16,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import lombok.Getter;
 import tr.bays.BaysJsfController;
-import tr.bays.dto.KullaniciDto;
-import tr.bays.service.KullaniciService;
+import tr.bays.dto.teskilat.KullaniciDto;
+import tr.bays.service.teskilat.KullaniciService;
 import util.Util;
 
 @SuppressWarnings("serial")

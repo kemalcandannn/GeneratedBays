@@ -13,13 +13,14 @@
 					<input type="text" class="topbar-search" placeholder="Type your search here" />
 				</div>
 				<pv:menu widgetVar="paradiseMenuWidget">
-					<p:menuitem value="#{labels.kullanici}" icon="pi pi-user" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-					<p:menuitem value="#{labels.fon_islemleri}" icon="pi pi-desktop" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-					<p:menuitem value="#{labels.dosya_transfer}" icon="pi pi-desktop" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-					<p:menuitem value="#{labels.goruntu_kontrolu}" icon="pi pi-desktop" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-					<p:menuitem value="#{labels.esatis_belgeleri}" icon="pi pi-desktop" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
-					<p:menuitem value="#{labels.raporlama}" icon="pi pi-desktop" outcome="/kullanici/kullaniciCrud" rendered="#{true}" /> 
-					<p:menuitem value="#{labels.ayarlar}" icon="pi pi-desktop" outcome="/kullanici/kullaniciCrud" rendered="#{true}" />
+					<p:menuitem value="#{labels.kullanici}" icon="pi pi-desktop" outcome="/teskilat/kullaniciCrud" rendered="#{true}" />
+					<p:menuitem value="#{labels.rol}" icon="pi pi-desktop" outcome="/genel/rolCrud" rendered="#{true}" />
+					<p:menuitem value="#{labels.fon_islemleri}" icon="pi pi-desktop" outcome="/teskilat/kullaniciCrud" rendered="#{true}" />
+					<p:menuitem value="#{labels.dosya_transfer}" icon="pi pi-desktop" outcome="/teskilat/kullaniciCrud" rendered="#{true}" />
+					<p:menuitem value="#{labels.goruntu_kontrolu}" icon="pi pi-desktop" outcome="/teskilat/kullaniciCrud" rendered="#{true}" />
+					<p:menuitem value="#{labels.esatis_belgeleri}" icon="pi pi-desktop" outcome="/teskilat/kullaniciCrud" rendered="#{true}" />
+					<p:menuitem value="#{labels.raporlama}" icon="pi pi-desktop" outcome="/teskilat/kullaniciCrud" rendered="#{true}" /> 
+					<p:menuitem value="#{labels.ayarlar}" icon="pi pi-desktop" outcome="/teskilat/kullaniciCrud" rendered="#{true}" />
 				</pv:menu>
 			</h:form>
 		</div>

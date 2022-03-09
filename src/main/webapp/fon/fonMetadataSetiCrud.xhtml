@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.fonMetadataSeti}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.fonMetadataSeti}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="fonMetadataSeti_form">
+					<algan:detayliArama	form="fonMetadataSeti_form" 
+										clearAction="#{fonMetadataSetiController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.metadata_seti_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{fonMetadataSetiController.sorguKriteri.metadata_seti_id}"
+											method="#{fonMetadataSetiController.autoComplete}"
+											listItem="fonMetadataSeti"
+											listItemValue="#{fonMetadataSeti}"
+											listItemLabel="#{fonMetadataSeti.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.fon_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{fonMetadataSetiController.sorguKriteri.fon_id}"
+											method="#{fonMetadataSetiController.autoComplete}"
+											listItem="fonMetadataSeti"
+											listItemValue="#{fonMetadataSeti}"
+											listItemLabel="#{fonMetadataSeti.ad}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="fonMetadataSetiListesi" 
+											widgetVar="fonMetadataSetiWidget" 
+											value="#{fonMetadataSetiController.list}" 
+											selection="#{fonMetadataSetiController.secilenListesi}" 
+											rowSelectUpdate="fonMetadataSeti_form:tablo_panel" 
+											cellEditAction="#{fonMetadataSetiController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{fonMetadataSetiController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('fonMetadataSeti_ekle')}" 
+																oncomplete="PF('fonMetadataSeti_islem_dialog').show()" 
+																update="fonMetadataSeti_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{fonMetadataSetiController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(fonMetadataSetiController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{fonMetadataSetiController.sil}" 
+															rendered="#{sessionController.yetkiliMi('fonMetadataSeti_sil')}" 
+															disabled="#{fonMetadataSetiController.secilenListesi == null or fonMetadataSetiController.secilenListesi.size() == 0}" 
+															update="fonMetadataSeti_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{fonMetadataSetiController.list.sorgu}" 
+																			clearAction="#{fonMetadataSetiController.formTemizle}" 
+																			update="fonMetadataSeti_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{fonMetadataSetiController.listele}" 
+														update="fonMetadataSeti_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="fonMetadataSetiListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column headerText="#{labels.metadata_seti_id}" sortBy="#{item.metadata_seti_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.metadata_seti_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.metadata_seti_id}"
+														value="#{item.metadata_seti_id}" 
+														completeMethod="#{fonMetadataSetiController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.metadata_seti_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.fon_id}" sortBy="#{item.fon_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.fon_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.fon_id}"
+														value="#{item.fon_id}" 
+														completeMethod="#{fonMetadataSetiController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.fon_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="fonMetadataSetiListesi:fonMetadataSetiListesi" 
+										widgetVar="fonMetadataSetiListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{fonMetadataSetiController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('fonMetadataSeti_guncelle')}" 
+										oncomplete="PF('fonMetadataSeti_islem_dialog').show()" 
+										update="fonMetadataSeti_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{fonMetadataSetiController.sil}" 
+										rendered="#{sessionController.yetkiliMi('fonMetadataSeti_sil')}" 
+										update="fonMetadataSeti_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{fonMetadataSetiController.listeBosalt()}" 
+										oncomplete="PF('fonMetadataSetiListesiContextMenu').hide()" 
+										update="fonMetadataSeti_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="fonMetadataSeti_islem_dialog" 
+								header="#{labels.fonMetadataSeti}" 
+								height="260"
+								widgetVar="fonMetadataSeti_islem_dialog" 
+								iptalAction="#{fonMetadataSetiController.iptal}" 
+								iptalUpdate="fonMetadataSeti_form:tablo_panel" 
+								kaydetAction="#{fonMetadataSetiController.kaydet('fonMetadataSeti_islem_dialog')}" 
+								kaydetUpdate="fonMetadataSeti_form,messages">
+
+					<p:outputLabel value="#{labels.metadata_seti_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{fonMetadataSetiController.sorguKriteri.metadata_seti_id}"
+										method="#{fonMetadataSetiController.autoComplete}"
+										listItem="fonMetadataSeti"
+										listItemValue="#{fonMetadataSeti}"
+										listItemLabel="#{fonMetadataSeti.ad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.metadata_seti_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.fon_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{fonMetadataSetiController.sorguKriteri.fon_id}"
+										method="#{fonMetadataSetiController.autoComplete}"
+										listItem="fonMetadataSeti"
+										listItemValue="#{fonMetadataSeti}"
+										listItemLabel="#{fonMetadataSeti.ad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.fon_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

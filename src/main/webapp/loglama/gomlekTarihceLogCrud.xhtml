@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.gomlekTarihceLog}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.gomlekTarihceLog}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="gomlekTarihceLog_form">
+					<algan:detayliArama	form="gomlekTarihceLog_form" 
+										clearAction="#{gomlekTarihceLogController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.tarih_saat}" styleClass="koyu" />
+						<algan:tarih	placeholder="#{labels.tarih_saat}" 
+										value="#{gomlekTarihceLogController.sorguKriteri.tarih_saat}" 
+										/>
+
+						<p:outputLabel value="#{labels.ip}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ip}" 
+											value="#{gomlekTarihceLogController.sorguKriteri.ip}" 
+											/>
+
+						<p:outputLabel value="#{labels.veri}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.veri}" 
+											value="#{gomlekTarihceLogController.sorguKriteri.veri}" 
+											/>
+
+						<p:outputLabel value="#{labels.durum}" styleClass="koyu" />
+						<algan:store	value="#{gomlekTarihceLogController.sorguKriteri.durum}" 
+										store="#{storeController.crudStore}" 
+										/>
+						<p:outputLabel value="#{labels.kullanici_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{gomlekTarihceLogController.sorguKriteri.kullanici_id}"
+											method="#{gomlekTarihceLogController.autoComplete}"
+											listItem="gomlekTarihceLog"
+											listItemValue="#{gomlekTarihceLog}"
+											listItemLabel="#{gomlekTarihceLog.ad_soyad}"
+											/>
+
+						<p:outputLabel value="#{labels.gomlek_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{gomlekTarihceLogController.sorguKriteri.gomlek_id}"
+											method="#{gomlekTarihceLogController.autoComplete}"
+											listItem="gomlekTarihceLog"
+											listItemValue="#{gomlekTarihceLog}"
+											listItemLabel="#{gomlekTarihceLog.transkripsiyon}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="gomlekTarihceLogListesi" 
+											widgetVar="gomlekTarihceLogWidget" 
+											value="#{gomlekTarihceLogController.list}" 
+											selection="#{gomlekTarihceLogController.secilenListesi}" 
+											rowSelectUpdate="gomlekTarihceLog_form:tablo_panel" 
+											cellEditAction="#{gomlekTarihceLogController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{gomlekTarihceLogController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('gomlekTarihceLog_ekle')}" 
+																oncomplete="PF('gomlekTarihceLog_islem_dialog').show()" 
+																update="gomlekTarihceLog_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{gomlekTarihceLogController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(gomlekTarihceLogController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{gomlekTarihceLogController.sil}" 
+															rendered="#{sessionController.yetkiliMi('gomlekTarihceLog_sil')}" 
+															disabled="#{gomlekTarihceLogController.secilenListesi == null or gomlekTarihceLogController.secilenListesi.size() == 0}" 
+															update="gomlekTarihceLog_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{gomlekTarihceLogController.list.sorgu}" 
+																			placeholder="#{labels.ip} | #{labels.veri} | "
+																			clearAction="#{gomlekTarihceLogController.formTemizle}" 
+																			update="gomlekTarihceLog_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{gomlekTarihceLogController.listele}" 
+														update="gomlekTarihceLog_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="gomlekTarihceLogListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.tarih_saat}" sortBy="#{item.tarih_saat}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.tarih_saat}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar	placeholder="#{labels.tarih_saat}" 
+													value="#{item.tarih_saat}" 
+													locale="tr" 
+													lang="tr" 
+													pattern="dd/MM/yyyy" 
+													mask="#{true}" 
+													converterMessage="#{labels.tarih_format_uyarisi}" 
+													validatorMessage="#{labels.tarih_kosul_uyarisi}" 
+													readonlyInput="#{false}" 
+															required="true"
+													requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih_saat, labels.zorunlu_alan_mesaji)}" 
+													/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ip}"
+								sortBy="#{item.ip}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ip}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ip}" 
+														value="#{item.ip}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ip, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.veri}"
+								sortBy="#{item.veri}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.veri}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.veri}" 
+														value="#{item.veri}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.veri, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.durum}" sortBy="#{item.durum}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.crudStore, item.durum)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.durum}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.durum, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.crudStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.kullanici_id}" sortBy="#{item.kullanici_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.kullanici_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.kullanici_id}"
+														value="#{item.kullanici_id}" 
+														completeMethod="#{gomlekTarihceLogController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad_soyad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kullanici_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.gomlek_id}" sortBy="#{item.gomlek_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.gomlek_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.gomlek_id}"
+														value="#{item.gomlek_id}" 
+														completeMethod="#{gomlekTarihceLogController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.transkripsiyon}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gomlek_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="gomlekTarihceLogListesi:gomlekTarihceLogListesi" 
+										widgetVar="gomlekTarihceLogListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{gomlekTarihceLogController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('gomlekTarihceLog_guncelle')}" 
+										oncomplete="PF('gomlekTarihceLog_islem_dialog').show()" 
+										update="gomlekTarihceLog_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{gomlekTarihceLogController.sil}" 
+										rendered="#{sessionController.yetkiliMi('gomlekTarihceLog_sil')}" 
+										update="gomlekTarihceLog_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{gomlekTarihceLogController.listeBosalt()}" 
+										oncomplete="PF('gomlekTarihceLogListesiContextMenu').hide()" 
+										update="gomlekTarihceLog_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="gomlekTarihceLog_islem_dialog" 
+								header="#{labels.gomlekTarihceLog}" 
+								height="260"
+								widgetVar="gomlekTarihceLog_islem_dialog" 
+								iptalAction="#{gomlekTarihceLogController.iptal}" 
+								iptalUpdate="gomlekTarihceLog_form:tablo_panel" 
+								kaydetAction="#{gomlekTarihceLogController.kaydet('gomlekTarihceLog_islem_dialog')}" 
+								kaydetUpdate="gomlekTarihceLog_form,messages">
+
+					<p:outputLabel value="#{labels.tarih_saat}" styleClass="koyu" />
+					<algan:tarih	placeholder="#{labels.tarih_saat}" 
+									value="#{gomlekTarihceLogController.secilen.tarih_saat}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih_saat, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.ip}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ip}" 
+										value="#{gomlekTarihceLogController.secilen.ip}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ip, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.veri}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.veri}" 
+										value="#{gomlekTarihceLogController.secilen.veri}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.veri, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.durum}" styleClass="koyu" />
+					<algan:store	value="#{gomlekTarihceLogController.secilen.durum}" 
+									store="#{storeController.crudStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.durum, labels.zorunlu_alan_mesaji)}"
+									/>
+					<p:outputLabel value="#{labels.kullanici_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{gomlekTarihceLogController.sorguKriteri.kullanici_id}"
+										method="#{gomlekTarihceLogController.autoComplete}"
+										listItem="gomlekTarihceLog"
+										listItemValue="#{gomlekTarihceLog}"
+										listItemLabel="#{gomlekTarihceLog.ad_soyad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kullanici_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.gomlek_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{gomlekTarihceLogController.sorguKriteri.gomlek_id}"
+										method="#{gomlekTarihceLogController.autoComplete}"
+										listItem="gomlekTarihceLog"
+										listItemValue="#{gomlekTarihceLog}"
+										listItemLabel="#{gomlekTarihceLog.transkripsiyon}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gomlek_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

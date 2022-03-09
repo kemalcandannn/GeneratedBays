@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.dbLog}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.dbLog}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="dbLog_form">
+					<algan:detayliArama	form="dbLog_form" 
+										clearAction="#{dbLogController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ad}" 
+											value="#{dbLogController.sorguKriteri.ad}" 
+											/>
+
+						<p:outputLabel value="#{labels.ip}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ip}" 
+											value="#{dbLogController.sorguKriteri.ip}" 
+											/>
+
+						<p:outputLabel value="#{labels.tarih}" styleClass="koyu" />
+						<algan:tarih	placeholder="#{labels.tarih}" 
+										value="#{dbLogController.sorguKriteri.tarih}" 
+										/>
+
+						<p:outputLabel value="#{labels.saat}" styleClass="koyu" />
+						<algan:tarih	placeholder="#{labels.saat}" 
+										value="#{dbLogController.sorguKriteri.saat}" 
+										/>
+
+						<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.tur}" 
+											value="#{dbLogController.sorguKriteri.tur}" 
+											/>
+
+						<p:outputLabel value="#{labels.aciklama}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.aciklama}" 
+											value="#{dbLogController.sorguKriteri.aciklama}" 
+											/>
+
+						<p:outputLabel value="#{labels.ek1}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ek1}" 
+											value="#{dbLogController.sorguKriteri.ek1}" 
+											/>
+
+						<p:outputLabel value="#{labels.ek2}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ek2}" 
+											value="#{dbLogController.sorguKriteri.ek2}" 
+											/>
+
+						<p:outputLabel value="#{labels.puk}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.puk}" 
+											value="#{dbLogController.sorguKriteri.puk}" 
+											/>
+
+						<p:outputLabel value="#{labels.sinif}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.sinif}" 
+											value="#{dbLogController.sorguKriteri.sinif}" 
+											/>
+
+						<p:outputLabel value="#{labels.metod}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.metod}" 
+											value="#{dbLogController.sorguKriteri.metod}" 
+											/>
+
+						<p:outputLabel value="#{labels.islem}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.islem}" 
+											value="#{dbLogController.sorguKriteri.islem}" 
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="dbLogListesi" 
+											widgetVar="dbLogWidget" 
+											value="#{dbLogController.list}" 
+											selection="#{dbLogController.secilenListesi}" 
+											rowSelectUpdate="dbLog_form:tablo_panel" 
+											cellEditAction="#{dbLogController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{dbLogController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('dbLog_ekle')}" 
+																oncomplete="PF('dbLog_islem_dialog').show()" 
+																update="dbLog_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{dbLogController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(dbLogController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{dbLogController.sil}" 
+															rendered="#{sessionController.yetkiliMi('dbLog_sil')}" 
+															disabled="#{dbLogController.secilenListesi == null or dbLogController.secilenListesi.size() == 0}" 
+															update="dbLog_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{dbLogController.list.sorgu}" 
+																			placeholder="#{labels.ad} | #{labels.ip} | #{labels.aciklama} | #{labels.ek1} | #{labels.ek2} | #{labels.puk} | #{labels.sinif} | #{labels.metod} | #{labels.islem}"
+																			clearAction="#{dbLogController.formTemizle}" 
+																			update="dbLog_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{dbLogController.listele}" 
+														update="dbLog_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="dbLogListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.ad}"
+								sortBy="#{item.ad}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ad}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ad}" 
+														value="#{item.ad}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ip}"
+								sortBy="#{item.ip}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ip}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ip}" 
+														value="#{item.ip}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ip, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.tarih}" sortBy="#{item.tarih}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.tarih}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar	placeholder="#{labels.tarih}" 
+													value="#{item.tarih}" 
+													locale="tr" 
+													lang="tr" 
+													pattern="dd/MM/yyyy" 
+													mask="#{true}" 
+													converterMessage="#{labels.tarih_format_uyarisi}" 
+													validatorMessage="#{labels.tarih_kosul_uyarisi}" 
+													readonlyInput="#{false}" 
+															required="false" 
+													requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih, labels.zorunlu_alan_mesaji)}" 
+													/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.saat}" sortBy="#{item.saat}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.saat}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar	placeholder="#{labels.saat}" 
+													value="#{item.saat}" 
+													locale="tr" 
+													lang="tr" 
+													pattern="dd/MM/yyyy" 
+													mask="#{true}" 
+													converterMessage="#{labels.tarih_format_uyarisi}" 
+													validatorMessage="#{labels.tarih_kosul_uyarisi}" 
+													readonlyInput="#{false}" 
+															required="false" 
+													requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.saat, labels.zorunlu_alan_mesaji)}" 
+													/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.tur}"
+								sortBy="#{item.tur}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.tur}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.tur}" 
+														value="#{item.tur}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.aciklama}"
+								sortBy="#{item.aciklama}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.aciklama}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.aciklama}" 
+														value="#{item.aciklama}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.aciklama, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ek1}"
+								sortBy="#{item.ek1}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ek1}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ek1}" 
+														value="#{item.ek1}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ek1, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ek2}"
+								sortBy="#{item.ek2}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ek2}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ek2}" 
+														value="#{item.ek2}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ek2, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.puk}"
+								sortBy="#{item.puk}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.puk}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.puk}" 
+														value="#{item.puk}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.puk, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.sinif}"
+								sortBy="#{item.sinif}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.sinif}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.sinif}" 
+														value="#{item.sinif}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.sinif, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.metod}"
+								sortBy="#{item.metod}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.metod}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.metod}" 
+														value="#{item.metod}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.metod, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.islem}"
+								sortBy="#{item.islem}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.islem}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.islem}" 
+														value="#{item.islem}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.islem, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="dbLogListesi:dbLogListesi" 
+										widgetVar="dbLogListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{dbLogController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('dbLog_guncelle')}" 
+										oncomplete="PF('dbLog_islem_dialog').show()" 
+										update="dbLog_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{dbLogController.sil}" 
+										rendered="#{sessionController.yetkiliMi('dbLog_sil')}" 
+										update="dbLog_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{dbLogController.listeBosalt()}" 
+										oncomplete="PF('dbLogListesiContextMenu').hide()" 
+										update="dbLog_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="dbLog_islem_dialog" 
+								header="#{labels.dbLog}" 
+								height="260"
+								widgetVar="dbLog_islem_dialog" 
+								iptalAction="#{dbLogController.iptal}" 
+								iptalUpdate="dbLog_form:tablo_panel" 
+								kaydetAction="#{dbLogController.kaydet('dbLog_islem_dialog')}" 
+								kaydetUpdate="dbLog_form,messages">
+
+					<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ad}" 
+										value="#{dbLogController.secilen.ad}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.ip}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ip}" 
+										value="#{dbLogController.secilen.ip}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ip, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.tarih}" styleClass="koyu" />
+					<algan:tarih	placeholder="#{labels.tarih}" 
+									value="#{dbLogController.secilen.tarih}" 
+									required="false"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.saat}" styleClass="koyu" />
+					<algan:tarih	placeholder="#{labels.saat}" 
+									value="#{dbLogController.secilen.saat}" 
+									required="false"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.saat, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.tur}" 
+										value="#{dbLogController.secilen.tur}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.aciklama}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.aciklama}" 
+										value="#{dbLogController.secilen.aciklama}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.aciklama, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.ek1}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ek1}" 
+										value="#{dbLogController.secilen.ek1}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ek1, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.ek2}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ek2}" 
+										value="#{dbLogController.secilen.ek2}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ek2, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.puk}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.puk}" 
+										value="#{dbLogController.secilen.puk}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.puk, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.sinif}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.sinif}" 
+										value="#{dbLogController.secilen.sinif}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.sinif, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.metod}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.metod}" 
+										value="#{dbLogController.secilen.metod}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.metod, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.islem}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.islem}" 
+										value="#{dbLogController.secilen.islem}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.islem, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

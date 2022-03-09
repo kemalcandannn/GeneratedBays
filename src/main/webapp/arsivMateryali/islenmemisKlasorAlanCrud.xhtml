@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.islenmemisKlasorAlan}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.islenmemisKlasorAlan}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="islenmemisKlasorAlan_form">
+					<algan:detayliArama	form="islenmemisKlasorAlan_form" 
+										clearAction="#{islenmemisKlasorAlanController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.deger}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.deger}" 
+											value="#{islenmemisKlasorAlanController.sorguKriteri.deger}" 
+											/>
+						<p:outputLabel value="#{labels.alan_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{islenmemisKlasorAlanController.sorguKriteri.alan_id}"
+											method="#{islenmemisKlasorAlanController.autoComplete}"
+											listItem="islenmemisKlasorAlan"
+											listItemValue="#{islenmemisKlasorAlan}"
+											listItemLabel="#{islenmemisKlasorAlan.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.islenmemis_klasor_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{islenmemisKlasorAlanController.sorguKriteri.islenmemis_klasor_id}"
+											method="#{islenmemisKlasorAlanController.autoComplete}"
+											listItem="islenmemisKlasorAlan"
+											listItemValue="#{islenmemisKlasorAlan}"
+											listItemLabel="#{islenmemisKlasorAlan.klasor_no}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="islenmemisKlasorAlanListesi" 
+											widgetVar="islenmemisKlasorAlanWidget" 
+											value="#{islenmemisKlasorAlanController.list}" 
+											selection="#{islenmemisKlasorAlanController.secilenListesi}" 
+											rowSelectUpdate="islenmemisKlasorAlan_form:tablo_panel" 
+											cellEditAction="#{islenmemisKlasorAlanController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{islenmemisKlasorAlanController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('islenmemisKlasorAlan_ekle')}" 
+																oncomplete="PF('islenmemisKlasorAlan_islem_dialog').show()" 
+																update="islenmemisKlasorAlan_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{islenmemisKlasorAlanController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(islenmemisKlasorAlanController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{islenmemisKlasorAlanController.sil}" 
+															rendered="#{sessionController.yetkiliMi('islenmemisKlasorAlan_sil')}" 
+															disabled="#{islenmemisKlasorAlanController.secilenListesi == null or islenmemisKlasorAlanController.secilenListesi.size() == 0}" 
+															update="islenmemisKlasorAlan_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{islenmemisKlasorAlanController.list.sorgu}" 
+																			placeholder="#{labels.deger}"
+																			clearAction="#{islenmemisKlasorAlanController.formTemizle}" 
+																			update="islenmemisKlasorAlan_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{islenmemisKlasorAlanController.listele}" 
+														update="islenmemisKlasorAlan_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="islenmemisKlasorAlanListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.deger}"
+								sortBy="#{item.deger}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.deger}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.deger}" 
+														value="#{item.deger}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.deger, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.alan_id}" sortBy="#{item.alan_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.alan_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.alan_id}"
+														value="#{item.alan_id}" 
+														completeMethod="#{islenmemisKlasorAlanController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.alan_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.islenmemis_klasor_id}" sortBy="#{item.islenmemis_klasor_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.islenmemis_klasor_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.islenmemis_klasor_id}"
+														value="#{item.islenmemis_klasor_id}" 
+														completeMethod="#{islenmemisKlasorAlanController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.klasor_no}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.islenmemis_klasor_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="islenmemisKlasorAlanListesi:islenmemisKlasorAlanListesi" 
+										widgetVar="islenmemisKlasorAlanListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{islenmemisKlasorAlanController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('islenmemisKlasorAlan_guncelle')}" 
+										oncomplete="PF('islenmemisKlasorAlan_islem_dialog').show()" 
+										update="islenmemisKlasorAlan_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{islenmemisKlasorAlanController.sil}" 
+										rendered="#{sessionController.yetkiliMi('islenmemisKlasorAlan_sil')}" 
+										update="islenmemisKlasorAlan_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{islenmemisKlasorAlanController.listeBosalt()}" 
+										oncomplete="PF('islenmemisKlasorAlanListesiContextMenu').hide()" 
+										update="islenmemisKlasorAlan_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="islenmemisKlasorAlan_islem_dialog" 
+								header="#{labels.islenmemisKlasorAlan}" 
+								height="260"
+								widgetVar="islenmemisKlasorAlan_islem_dialog" 
+								iptalAction="#{islenmemisKlasorAlanController.iptal}" 
+								iptalUpdate="islenmemisKlasorAlan_form:tablo_panel" 
+								kaydetAction="#{islenmemisKlasorAlanController.kaydet('islenmemisKlasorAlan_islem_dialog')}" 
+								kaydetUpdate="islenmemisKlasorAlan_form,messages">
+
+					<p:outputLabel value="#{labels.deger}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.deger}" 
+										value="#{islenmemisKlasorAlanController.secilen.deger}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.deger, labels.zorunlu_alan_mesaji)}"
+										/>
+					<p:outputLabel value="#{labels.alan_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{islenmemisKlasorAlanController.sorguKriteri.alan_id}"
+										method="#{islenmemisKlasorAlanController.autoComplete}"
+										listItem="islenmemisKlasorAlan"
+										listItemValue="#{islenmemisKlasorAlan}"
+										listItemLabel="#{islenmemisKlasorAlan.ad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.alan_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.islenmemis_klasor_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{islenmemisKlasorAlanController.sorguKriteri.islenmemis_klasor_id}"
+										method="#{islenmemisKlasorAlanController.autoComplete}"
+										listItem="islenmemisKlasorAlan"
+										listItemValue="#{islenmemisKlasorAlan}"
+										listItemLabel="#{islenmemisKlasorAlan.klasor_no}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.islenmemis_klasor_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

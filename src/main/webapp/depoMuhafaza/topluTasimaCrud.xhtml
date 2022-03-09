@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.topluTasima}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.topluTasima}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="topluTasima_form">
+					<algan:detayliArama	form="topluTasima_form" 
+										clearAction="#{topluTasimaController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.tarih_saat}" styleClass="koyu" />
+						<algan:tarih	placeholder="#{labels.tarih_saat}" 
+										value="#{topluTasimaController.sorguKriteri.tarih_saat}" 
+										/>
+
+						<p:outputLabel value="#{labels.ip}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ip}" 
+											value="#{topluTasimaController.sorguKriteri.ip}" 
+											/>
+						<p:outputLabel value="#{labels.kullanici_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{topluTasimaController.sorguKriteri.kullanici_id}"
+											method="#{topluTasimaController.autoComplete}"
+											listItem="topluTasima"
+											listItemValue="#{topluTasima}"
+											listItemLabel="#{topluTasima.ad_soyad}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="topluTasimaListesi" 
+											widgetVar="topluTasimaWidget" 
+											value="#{topluTasimaController.list}" 
+											selection="#{topluTasimaController.secilenListesi}" 
+											rowSelectUpdate="topluTasima_form:tablo_panel" 
+											cellEditAction="#{topluTasimaController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{topluTasimaController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('topluTasima_ekle')}" 
+																oncomplete="PF('topluTasima_islem_dialog').show()" 
+																update="topluTasima_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{topluTasimaController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(topluTasimaController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{topluTasimaController.sil}" 
+															rendered="#{sessionController.yetkiliMi('topluTasima_sil')}" 
+															disabled="#{topluTasimaController.secilenListesi == null or topluTasimaController.secilenListesi.size() == 0}" 
+															update="topluTasima_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{topluTasimaController.list.sorgu}" 
+																			placeholder="#{labels.ip}"
+																			clearAction="#{topluTasimaController.formTemizle}" 
+																			update="topluTasima_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{topluTasimaController.listele}" 
+														update="topluTasima_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="topluTasimaListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.tarih_saat}" sortBy="#{item.tarih_saat}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.tarih_saat}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar	placeholder="#{labels.tarih_saat}" 
+													value="#{item.tarih_saat}" 
+													locale="tr" 
+													lang="tr" 
+													pattern="dd/MM/yyyy" 
+													mask="#{true}" 
+													converterMessage="#{labels.tarih_format_uyarisi}" 
+													validatorMessage="#{labels.tarih_kosul_uyarisi}" 
+													readonlyInput="#{false}" 
+															required="true"
+													requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih_saat, labels.zorunlu_alan_mesaji)}" 
+													/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ip}"
+								sortBy="#{item.ip}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ip}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ip}" 
+														value="#{item.ip}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ip, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.kullanici_id}" sortBy="#{item.kullanici_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.kullanici_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.kullanici_id}"
+														value="#{item.kullanici_id}" 
+														completeMethod="#{topluTasimaController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad_soyad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kullanici_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="topluTasimaListesi:topluTasimaListesi" 
+										widgetVar="topluTasimaListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{topluTasimaController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('topluTasima_guncelle')}" 
+										oncomplete="PF('topluTasima_islem_dialog').show()" 
+										update="topluTasima_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{topluTasimaController.sil}" 
+										rendered="#{sessionController.yetkiliMi('topluTasima_sil')}" 
+										update="topluTasima_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{topluTasimaController.listeBosalt()}" 
+										oncomplete="PF('topluTasimaListesiContextMenu').hide()" 
+										update="topluTasima_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="topluTasima_islem_dialog" 
+								header="#{labels.topluTasima}" 
+								height="260"
+								widgetVar="topluTasima_islem_dialog" 
+								iptalAction="#{topluTasimaController.iptal}" 
+								iptalUpdate="topluTasima_form:tablo_panel" 
+								kaydetAction="#{topluTasimaController.kaydet('topluTasima_islem_dialog')}" 
+								kaydetUpdate="topluTasima_form,messages">
+
+					<p:outputLabel value="#{labels.tarih_saat}" styleClass="koyu" />
+					<algan:tarih	placeholder="#{labels.tarih_saat}" 
+									value="#{topluTasimaController.secilen.tarih_saat}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih_saat, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.ip}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ip}" 
+										value="#{topluTasimaController.secilen.ip}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ip, labels.zorunlu_alan_mesaji)}"
+										/>
+					<p:outputLabel value="#{labels.kullanici_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{topluTasimaController.sorguKriteri.kullanici_id}"
+										method="#{topluTasimaController.autoComplete}"
+										listItem="topluTasima"
+										listItemValue="#{topluTasima}"
+										listItemLabel="#{topluTasima.ad_soyad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kullanici_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.gomlek}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.gomlek}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="gomlek_form">
+					<algan:detayliArama	form="gomlek_form" 
+										clearAction="#{gomlekController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.transkripsiyon}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.transkripsiyon}" 
+											value="#{gomlekController.sorguKriteri.transkripsiyon}" 
+											/>
+
+						<p:outputLabel value="#{labels.tarih_tur}" styleClass="koyu" />
+						<algan:store	value="#{gomlekController.sorguKriteri.tarih_tur}" 
+										store="#{storeController.tarihTurStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.ay}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ay}" 
+											value="#{gomlekController.sorguKriteri.ay}" 
+											/>
+
+						<p:outputLabel value="#{labels.gun}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.gun}" 
+											value="#{gomlekController.sorguKriteri.gun}" 
+											/>
+
+						<p:outputLabel value="#{labels.yil}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.yil}" 
+											value="#{gomlekController.sorguKriteri.yil}" 
+											/>
+
+						<p:outputLabel value="#{labels.gizlilik}" styleClass="koyu" />
+						<algan:store	value="#{gomlekController.sorguKriteri.gizlilik}" 
+										store="#{storeController.gizlilikStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.restorasyon_ihtiyaci}" styleClass="koyu" />
+						<algan:store	value="#{gomlekController.sorguKriteri.restorasyon_ihtiyaci}" 
+										store="#{storeController.gomlekRestorasyonIhtiyaciStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.ozel_no}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ozel_no}" 
+											value="#{gomlekController.sorguKriteri.ozel_no}" 
+											/>
+						<p:outputLabel value="#{labels.ozel_no_turu_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{gomlekController.sorguKriteri.ozel_no_turu_id}"
+											method="#{gomlekController.autoComplete}"
+											listItem="gomlek"
+											listItemValue="#{gomlek}"
+											listItemLabel="#{gomlek.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.klasor_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{gomlekController.sorguKriteri.klasor_id}"
+											method="#{gomlekController.autoComplete}"
+											listItem="gomlek"
+											listItemValue="#{gomlek}"
+											listItemLabel="#{gomlek.klasor_no}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="gomlekListesi" 
+											widgetVar="gomlekWidget" 
+											value="#{gomlekController.list}" 
+											selection="#{gomlekController.secilenListesi}" 
+											rowSelectUpdate="gomlek_form:tablo_panel" 
+											cellEditAction="#{gomlekController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{gomlekController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('gomlek_ekle')}" 
+																oncomplete="PF('gomlek_islem_dialog').show()" 
+																update="gomlek_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{gomlekController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(gomlekController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{gomlekController.sil}" 
+															rendered="#{sessionController.yetkiliMi('gomlek_sil')}" 
+															disabled="#{gomlekController.secilenListesi == null or gomlekController.secilenListesi.size() == 0}" 
+															update="gomlek_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{gomlekController.list.sorgu}" 
+																			placeholder="#{labels.transkripsiyon} | #{labels.ay} | #{labels.gun} | #{labels.yil} | #{labels.ozel_no}"
+																			clearAction="#{gomlekController.formTemizle}" 
+																			update="gomlek_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{gomlekController.listele}" 
+														update="gomlek_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="gomlekListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.transkripsiyon}"
+								sortBy="#{item.transkripsiyon}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.transkripsiyon}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.transkripsiyon}" 
+														value="#{item.transkripsiyon}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.transkripsiyon, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.tarih_tur}" sortBy="#{item.tarih_tur}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.tarihTurStore, item.tarih_tur)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.tarih_tur}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih_tur, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.tarihTurStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ay}"
+								sortBy="#{item.ay}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ay}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ay}" 
+														value="#{item.ay}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ay, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.gun}"
+								sortBy="#{item.gun}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.gun}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.gun}" 
+														value="#{item.gun}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gun, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.yil}"
+								sortBy="#{item.yil}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.yil}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.yil}" 
+														value="#{item.yil}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.yil, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.gizlilik}" sortBy="#{item.gizlilik}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.gizlilikStore, item.gizlilik)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.gizlilik}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gizlilik, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.gizlilikStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.restorasyon_ihtiyaci}" sortBy="#{item.restorasyon_ihtiyaci}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.gomlekRestorasyonIhtiyaciStore, item.restorasyon_ihtiyaci)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.restorasyon_ihtiyaci}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.restorasyon_ihtiyaci, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.gomlekRestorasyonIhtiyaciStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ozel_no}"
+								sortBy="#{item.ozel_no}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ozel_no}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ozel_no}" 
+														value="#{item.ozel_no}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ozel_no, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.ozel_no_turu_id}" sortBy="#{item.ozel_no_turu_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ozel_no_turu_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.ozel_no_turu_id}"
+														value="#{item.ozel_no_turu_id}" 
+														completeMethod="#{gomlekController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ozel_no_turu_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.klasor_id}" sortBy="#{item.klasor_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.klasor_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.klasor_id}"
+														value="#{item.klasor_id}" 
+														completeMethod="#{gomlekController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.klasor_no}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.klasor_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="gomlekListesi:gomlekListesi" 
+										widgetVar="gomlekListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{gomlekController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('gomlek_guncelle')}" 
+										oncomplete="PF('gomlek_islem_dialog').show()" 
+										update="gomlek_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{gomlekController.sil}" 
+										rendered="#{sessionController.yetkiliMi('gomlek_sil')}" 
+										update="gomlek_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{gomlekController.listeBosalt()}" 
+										oncomplete="PF('gomlekListesiContextMenu').hide()" 
+										update="gomlek_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="gomlek_islem_dialog" 
+								header="#{labels.gomlek}" 
+								height="260"
+								widgetVar="gomlek_islem_dialog" 
+								iptalAction="#{gomlekController.iptal}" 
+								iptalUpdate="gomlek_form:tablo_panel" 
+								kaydetAction="#{gomlekController.kaydet('gomlek_islem_dialog')}" 
+								kaydetUpdate="gomlek_form,messages">
+
+					<p:outputLabel value="#{labels.transkripsiyon}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.transkripsiyon}" 
+										value="#{gomlekController.secilen.transkripsiyon}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.transkripsiyon, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.tarih_tur}" styleClass="koyu" />
+					<algan:store	value="#{gomlekController.secilen.tarih_tur}" 
+									store="#{storeController.tarihTurStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tarih_tur, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.ay}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ay}" 
+										value="#{gomlekController.secilen.ay}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ay, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.gun}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.gun}" 
+										value="#{gomlekController.secilen.gun}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gun, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.yil}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.yil}" 
+										value="#{gomlekController.secilen.yil}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.yil, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.gizlilik}" styleClass="koyu" />
+					<algan:store	value="#{gomlekController.secilen.gizlilik}" 
+									store="#{storeController.gizlilikStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gizlilik, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.restorasyon_ihtiyaci}" styleClass="koyu" />
+					<algan:store	value="#{gomlekController.secilen.restorasyon_ihtiyaci}" 
+									store="#{storeController.gomlekRestorasyonIhtiyaciStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.restorasyon_ihtiyaci, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.ozel_no}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ozel_no}" 
+										value="#{gomlekController.secilen.ozel_no}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ozel_no, labels.zorunlu_alan_mesaji)}"
+										/>
+					<p:outputLabel value="#{labels.ozel_no_turu_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{gomlekController.sorguKriteri.ozel_no_turu_id}"
+										method="#{gomlekController.autoComplete}"
+										listItem="gomlek"
+										listItemValue="#{gomlek}"
+										listItemLabel="#{gomlek.ad}"
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ozel_no_turu_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.klasor_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{gomlekController.sorguKriteri.klasor_id}"
+										method="#{gomlekController.autoComplete}"
+										listItem="gomlek"
+										listItemValue="#{gomlek}"
+										listItemLabel="#{gomlek.klasor_no}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.klasor_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

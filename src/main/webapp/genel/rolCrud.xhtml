@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.rol}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.rol}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="rol_form">
+					<algan:detayliArama	form="rol_form" 
+										clearAction="#{rolController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ad}" 
+											value="#{rolController.sorguKriteri.ad}" 
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="rolListesi" 
+											widgetVar="rolWidget" 
+											value="#{rolController.list}" 
+											selection="#{rolController.secilenListesi}" 
+											rowSelectUpdate="rol_form:tablo_panel" 
+											cellEditAction="#{rolController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{rolController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('rol_ekle')}" 
+																oncomplete="PF('rol_islem_dialog').show()" 
+																update="rol_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{rolController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(rolController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{rolController.sil}" 
+															rendered="#{sessionController.yetkiliMi('rol_sil')}" 
+															disabled="#{rolController.secilenListesi == null or rolController.secilenListesi.size() == 0}" 
+															update="rol_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{rolController.list.sorgu}" 
+																			placeholder="#{labels.ad}"
+																			clearAction="#{rolController.formTemizle}" 
+																			update="rol_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{rolController.listele}" 
+														update="rol_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="rolListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.ad}"
+								sortBy="#{item.ad}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ad}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ad}" 
+														value="#{item.ad}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="rolListesi:rolListesi" 
+										widgetVar="rolListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{rolController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('rol_guncelle')}" 
+										oncomplete="PF('rol_islem_dialog').show()" 
+										update="rol_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{rolController.sil}" 
+										rendered="#{sessionController.yetkiliMi('rol_sil')}" 
+										update="rol_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{rolController.listeBosalt()}" 
+										oncomplete="PF('rolListesiContextMenu').hide()" 
+										update="rol_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="rol_islem_dialog" 
+								header="#{labels.rol}" 
+								height="260"
+								widgetVar="rol_islem_dialog" 
+								iptalAction="#{rolController.iptal}" 
+								iptalUpdate="rol_form:tablo_panel" 
+								kaydetAction="#{rolController.kaydet('rol_islem_dialog')}" 
+								kaydetUpdate="rol_form,messages">
+
+					<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ad}" 
+										value="#{rolController.secilen.ad}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.arsivKurumu}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.arsivKurumu}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="arsivKurumu_form">
+					<algan:detayliArama	form="arsivKurumu_form" 
+										clearAction="#{arsivKurumuController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ad}" 
+											value="#{arsivKurumuController.sorguKriteri.ad}" 
+											/>
+
+						<p:outputLabel value="#{labels.durum}" styleClass="koyu" />
+						<algan:store	value="#{arsivKurumuController.sorguKriteri.durum}" 
+										store="#{storeController.aktifStore}" 
+										/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="arsivKurumuListesi" 
+											widgetVar="arsivKurumuWidget" 
+											value="#{arsivKurumuController.list}" 
+											selection="#{arsivKurumuController.secilenListesi}" 
+											rowSelectUpdate="arsivKurumu_form:tablo_panel" 
+											cellEditAction="#{arsivKurumuController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{arsivKurumuController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('arsivKurumu_ekle')}" 
+																oncomplete="PF('arsivKurumu_islem_dialog').show()" 
+																update="arsivKurumu_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{arsivKurumuController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(arsivKurumuController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{arsivKurumuController.sil}" 
+															rendered="#{sessionController.yetkiliMi('arsivKurumu_sil')}" 
+															disabled="#{arsivKurumuController.secilenListesi == null or arsivKurumuController.secilenListesi.size() == 0}" 
+															update="arsivKurumu_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{arsivKurumuController.list.sorgu}" 
+																			placeholder="#{labels.ad} | "
+																			clearAction="#{arsivKurumuController.formTemizle}" 
+																			update="arsivKurumu_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{arsivKurumuController.listele}" 
+														update="arsivKurumu_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="arsivKurumuListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.ad}"
+								sortBy="#{item.ad}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ad}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ad}" 
+														value="#{item.ad}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.durum}" sortBy="#{item.durum}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.aktifStore, item.durum)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.durum}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.durum, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.aktifStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="arsivKurumuListesi:arsivKurumuListesi" 
+										widgetVar="arsivKurumuListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{arsivKurumuController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('arsivKurumu_guncelle')}" 
+										oncomplete="PF('arsivKurumu_islem_dialog').show()" 
+										update="arsivKurumu_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{arsivKurumuController.sil}" 
+										rendered="#{sessionController.yetkiliMi('arsivKurumu_sil')}" 
+										update="arsivKurumu_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{arsivKurumuController.listeBosalt()}" 
+										oncomplete="PF('arsivKurumuListesiContextMenu').hide()" 
+										update="arsivKurumu_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="arsivKurumu_islem_dialog" 
+								header="#{labels.arsivKurumu}" 
+								height="260"
+								widgetVar="arsivKurumu_islem_dialog" 
+								iptalAction="#{arsivKurumuController.iptal}" 
+								iptalUpdate="arsivKurumu_form:tablo_panel" 
+								kaydetAction="#{arsivKurumuController.kaydet('arsivKurumu_islem_dialog')}" 
+								kaydetUpdate="arsivKurumu_form,messages">
+
+					<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ad}" 
+										value="#{arsivKurumuController.secilen.ad}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.durum}" styleClass="koyu" />
+					<algan:store	value="#{arsivKurumuController.secilen.durum}" 
+									store="#{storeController.aktifStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.durum, labels.zorunlu_alan_mesaji)}"
+									/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -3,7 +3,7 @@ package tr.bays.service.email;
 import java.io.File;
 import java.util.List;
 
-import tr.bays.dto.KullaniciDto;
+import tr.bays.dto.teskilat.KullaniciDto;
 
 public interface EmailService {
 

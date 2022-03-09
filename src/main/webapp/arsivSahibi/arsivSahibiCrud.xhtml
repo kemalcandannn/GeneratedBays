@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.arsivSahibi}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.arsivSahibi}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="arsivSahibi_form">
+					<algan:detayliArama	form="arsivSahibi_form" 
+										clearAction="#{arsivSahibiController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ad}" 
+											value="#{arsivSahibiController.sorguKriteri.ad}" 
+											/>
+
+						<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+						<algan:store	value="#{arsivSahibiController.sorguKriteri.tur}" 
+										store="#{storeController.arsivSahibiTurStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.aktif}" styleClass="koyu" />
+						<algan:store	value="#{arsivSahibiController.sorguKriteri.aktif}" 
+										store="#{storeController.aktifStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.ust_kurum_iliski}" styleClass="koyu" />
+						<algan:store	value="#{arsivSahibiController.sorguKriteri.ust_kurum_iliski}" 
+										store="#{storeController.arsivSahibiustKurumIliskiStore}" 
+										/>
+						<p:outputLabel value="#{labels.oncul_versiyon_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{arsivSahibiController.sorguKriteri.oncul_versiyon_id}"
+											method="#{arsivSahibiController.autoComplete}"
+											listItem="arsivSahibi"
+											listItemValue="#{arsivSahibi}"
+											listItemLabel="#{arsivSahibi.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.ust_arsiv_sahibi_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{arsivSahibiController.sorguKriteri.ust_arsiv_sahibi_id}"
+											method="#{arsivSahibiController.autoComplete}"
+											listItem="arsivSahibi"
+											listItemValue="#{arsivSahibi}"
+											listItemLabel="#{arsivSahibi.ad}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="arsivSahibiListesi" 
+											widgetVar="arsivSahibiWidget" 
+											value="#{arsivSahibiController.list}" 
+											selection="#{arsivSahibiController.secilenListesi}" 
+											rowSelectUpdate="arsivSahibi_form:tablo_panel" 
+											cellEditAction="#{arsivSahibiController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{arsivSahibiController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('arsivSahibi_ekle')}" 
+																oncomplete="PF('arsivSahibi_islem_dialog').show()" 
+																update="arsivSahibi_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{arsivSahibiController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(arsivSahibiController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{arsivSahibiController.sil}" 
+															rendered="#{sessionController.yetkiliMi('arsivSahibi_sil')}" 
+															disabled="#{arsivSahibiController.secilenListesi == null or arsivSahibiController.secilenListesi.size() == 0}" 
+															update="arsivSahibi_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{arsivSahibiController.list.sorgu}" 
+																			placeholder="#{labels.ad} | "
+																			clearAction="#{arsivSahibiController.formTemizle}" 
+																			update="arsivSahibi_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{arsivSahibiController.listele}" 
+														update="arsivSahibi_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="arsivSahibiListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.ad}"
+								sortBy="#{item.ad}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ad}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ad}" 
+														value="#{item.ad}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.tur}" sortBy="#{item.tur}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.arsivSahibiTurStore, item.tur)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.tur}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.arsivSahibiTurStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.aktif}" sortBy="#{item.aktif}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.aktifStore, item.aktif)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.aktif}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.aktif, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.aktifStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ust_kurum_iliski}" sortBy="#{item.ust_kurum_iliski}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.arsivSahibiustKurumIliskiStore, item.ust_kurum_iliski)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.ust_kurum_iliski}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ust_kurum_iliski, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.arsivSahibiustKurumIliskiStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.oncul_versiyon_id}" sortBy="#{item.oncul_versiyon_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.oncul_versiyon_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.oncul_versiyon_id}"
+														value="#{item.oncul_versiyon_id}" 
+														completeMethod="#{arsivSahibiController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.oncul_versiyon_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.ust_arsiv_sahibi_id}" sortBy="#{item.ust_arsiv_sahibi_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ust_arsiv_sahibi_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.ust_arsiv_sahibi_id}"
+														value="#{item.ust_arsiv_sahibi_id}" 
+														completeMethod="#{arsivSahibiController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ust_arsiv_sahibi_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="arsivSahibiListesi:arsivSahibiListesi" 
+										widgetVar="arsivSahibiListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{arsivSahibiController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('arsivSahibi_guncelle')}" 
+										oncomplete="PF('arsivSahibi_islem_dialog').show()" 
+										update="arsivSahibi_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{arsivSahibiController.sil}" 
+										rendered="#{sessionController.yetkiliMi('arsivSahibi_sil')}" 
+										update="arsivSahibi_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{arsivSahibiController.listeBosalt()}" 
+										oncomplete="PF('arsivSahibiListesiContextMenu').hide()" 
+										update="arsivSahibi_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="arsivSahibi_islem_dialog" 
+								header="#{labels.arsivSahibi}" 
+								height="260"
+								widgetVar="arsivSahibi_islem_dialog" 
+								iptalAction="#{arsivSahibiController.iptal}" 
+								iptalUpdate="arsivSahibi_form:tablo_panel" 
+								kaydetAction="#{arsivSahibiController.kaydet('arsivSahibi_islem_dialog')}" 
+								kaydetUpdate="arsivSahibi_form,messages">
+
+					<p:outputLabel value="#{labels.ad}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ad}" 
+										value="#{arsivSahibiController.secilen.ad}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+					<algan:store	value="#{arsivSahibiController.secilen.tur}" 
+									store="#{storeController.arsivSahibiTurStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.aktif}" styleClass="koyu" />
+					<algan:store	value="#{arsivSahibiController.secilen.aktif}" 
+									store="#{storeController.aktifStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.aktif, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.ust_kurum_iliski}" styleClass="koyu" />
+					<algan:store	value="#{arsivSahibiController.secilen.ust_kurum_iliski}" 
+									store="#{storeController.arsivSahibiustKurumIliskiStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ust_kurum_iliski, labels.zorunlu_alan_mesaji)}"
+									/>
+					<p:outputLabel value="#{labels.oncul_versiyon_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{arsivSahibiController.sorguKriteri.oncul_versiyon_id}"
+										method="#{arsivSahibiController.autoComplete}"
+										listItem="arsivSahibi"
+										listItemValue="#{arsivSahibi}"
+										listItemLabel="#{arsivSahibi.ad}"
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.oncul_versiyon_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.ust_arsiv_sahibi_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{arsivSahibiController.sorguKriteri.ust_arsiv_sahibi_id}"
+										method="#{arsivSahibiController.autoComplete}"
+										listItem="arsivSahibi"
+										listItemValue="#{arsivSahibi}"
+										listItemLabel="#{arsivSahibi.ad}"
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ust_arsiv_sahibi_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.klasor}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.klasor}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="klasor_form">
+					<algan:detayliArama	form="klasor_form" 
+										clearAction="#{klasorController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.klasor_no}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.klasor_no}" 
+											value="#{klasorController.sorguKriteri.klasor_no}" 
+											/>
+
+						<p:outputLabel value="#{labels.klasor_ek_no}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.klasor_ek_no}" 
+											value="#{klasorController.sorguKriteri.klasor_ek_no}" 
+											/>
+
+						<p:outputLabel value="#{labels.gizlilik}" styleClass="koyu" />
+						<algan:store	value="#{klasorController.sorguKriteri.gizlilik}" 
+										store="#{storeController.gizlilikStore}" 
+										/>
+						<p:outputLabel value="#{labels.fon_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{klasorController.sorguKriteri.fon_id}"
+											method="#{klasorController.autoComplete}"
+											listItem="klasor"
+											listItemValue="#{klasor}"
+											listItemLabel="#{klasor.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.ust_klasor_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{klasorController.sorguKriteri.ust_klasor_id}"
+											method="#{klasorController.autoComplete}"
+											listItem="klasor"
+											listItemValue="#{klasor}"
+											listItemLabel="#{klasor.klasor_no}"
+											/>
+
+						<p:outputLabel value="#{labels.depo_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{klasorController.sorguKriteri.depo_id}"
+											method="#{klasorController.autoComplete}"
+											listItem="klasor"
+											listItemValue="#{klasor}"
+											listItemLabel="#{klasor.ad}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="klasorListesi" 
+											widgetVar="klasorWidget" 
+											value="#{klasorController.list}" 
+											selection="#{klasorController.secilenListesi}" 
+											rowSelectUpdate="klasor_form:tablo_panel" 
+											cellEditAction="#{klasorController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{klasorController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('klasor_ekle')}" 
+																oncomplete="PF('klasor_islem_dialog').show()" 
+																update="klasor_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{klasorController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(klasorController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{klasorController.sil}" 
+															rendered="#{sessionController.yetkiliMi('klasor_sil')}" 
+															disabled="#{klasorController.secilenListesi == null or klasorController.secilenListesi.size() == 0}" 
+															update="klasor_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{klasorController.list.sorgu}" 
+																			placeholder="#{labels.klasor_no} | #{labels.klasor_ek_no} | "
+																			clearAction="#{klasorController.formTemizle}" 
+																			update="klasor_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{klasorController.listele}" 
+														update="klasor_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="klasorListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.klasor_no}"
+								sortBy="#{item.klasor_no}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.klasor_no}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.klasor_no}" 
+														value="#{item.klasor_no}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.klasor_no, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.klasor_ek_no}"
+								sortBy="#{item.klasor_ek_no}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.klasor_ek_no}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.klasor_ek_no}" 
+														value="#{item.klasor_ek_no}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.klasor_ek_no, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.gizlilik}" sortBy="#{item.gizlilik}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.gizlilikStore, item.gizlilik)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.gizlilik}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gizlilik, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.gizlilikStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.fon_id}" sortBy="#{item.fon_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.fon_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.fon_id}"
+														value="#{item.fon_id}" 
+														completeMethod="#{klasorController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.fon_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.ust_klasor_id}" sortBy="#{item.ust_klasor_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ust_klasor_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.ust_klasor_id}"
+														value="#{item.ust_klasor_id}" 
+														completeMethod="#{klasorController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.klasor_no}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ust_klasor_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.depo_id}" sortBy="#{item.depo_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.depo_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.depo_id}"
+														value="#{item.depo_id}" 
+														completeMethod="#{klasorController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="klasorListesi:klasorListesi" 
+										widgetVar="klasorListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{klasorController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('klasor_guncelle')}" 
+										oncomplete="PF('klasor_islem_dialog').show()" 
+										update="klasor_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{klasorController.sil}" 
+										rendered="#{sessionController.yetkiliMi('klasor_sil')}" 
+										update="klasor_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{klasorController.listeBosalt()}" 
+										oncomplete="PF('klasorListesiContextMenu').hide()" 
+										update="klasor_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="klasor_islem_dialog" 
+								header="#{labels.klasor}" 
+								height="260"
+								widgetVar="klasor_islem_dialog" 
+								iptalAction="#{klasorController.iptal}" 
+								iptalUpdate="klasor_form:tablo_panel" 
+								kaydetAction="#{klasorController.kaydet('klasor_islem_dialog')}" 
+								kaydetUpdate="klasor_form,messages">
+
+					<p:outputLabel value="#{labels.klasor_no}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.klasor_no}" 
+										value="#{klasorController.secilen.klasor_no}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.klasor_no, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.klasor_ek_no}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.klasor_ek_no}" 
+										value="#{klasorController.secilen.klasor_ek_no}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.klasor_ek_no, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.gizlilik}" styleClass="koyu" />
+					<algan:store	value="#{klasorController.secilen.gizlilik}" 
+									store="#{storeController.gizlilikStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gizlilik, labels.zorunlu_alan_mesaji)}"
+									/>
+					<p:outputLabel value="#{labels.fon_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{klasorController.sorguKriteri.fon_id}"
+										method="#{klasorController.autoComplete}"
+										listItem="klasor"
+										listItemValue="#{klasor}"
+										listItemLabel="#{klasor.ad}"
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.fon_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.ust_klasor_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{klasorController.sorguKriteri.ust_klasor_id}"
+										method="#{klasorController.autoComplete}"
+										listItem="klasor"
+										listItemValue="#{klasor}"
+										listItemLabel="#{klasor.klasor_no}"
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ust_klasor_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.depo_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{klasorController.sorguKriteri.depo_id}"
+										method="#{klasorController.autoComplete}"
+										listItem="klasor"
+										listItemValue="#{klasor}"
+										listItemLabel="#{klasor.ad}"
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.defterSayfa}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.defterSayfa}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="defterSayfa_form">
+					<algan:detayliArama	form="defterSayfa_form" 
+										clearAction="#{defterSayfaController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.gizlilik}" styleClass="koyu" />
+						<algan:store	value="#{defterSayfaController.sorguKriteri.gizlilik}" 
+										store="#{storeController.gizlilikStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+						<algan:store	value="#{defterSayfaController.sorguKriteri.tur}" 
+										store="#{storeController.defterSayfaTurStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.sayfa_no}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.sayfa_no}" 
+											value="#{defterSayfaController.sorguKriteri.sayfa_no}" 
+											/>
+						<p:outputLabel value="#{labels.defter_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{defterSayfaController.sorguKriteri.defter_id}"
+											method="#{defterSayfaController.autoComplete}"
+											listItem="defterSayfa"
+											listItemValue="#{defterSayfa}"
+											listItemLabel="#{defterSayfa.defter_no}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="defterSayfaListesi" 
+											widgetVar="defterSayfaWidget" 
+											value="#{defterSayfaController.list}" 
+											selection="#{defterSayfaController.secilenListesi}" 
+											rowSelectUpdate="defterSayfa_form:tablo_panel" 
+											cellEditAction="#{defterSayfaController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{defterSayfaController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('defterSayfa_ekle')}" 
+																oncomplete="PF('defterSayfa_islem_dialog').show()" 
+																update="defterSayfa_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{defterSayfaController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(defterSayfaController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{defterSayfaController.sil}" 
+															rendered="#{sessionController.yetkiliMi('defterSayfa_sil')}" 
+															disabled="#{defterSayfaController.secilenListesi == null or defterSayfaController.secilenListesi.size() == 0}" 
+															update="defterSayfa_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{defterSayfaController.list.sorgu}" 
+																			placeholder="#{labels.sayfa_no}"
+																			clearAction="#{defterSayfaController.formTemizle}" 
+																			update="defterSayfa_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{defterSayfaController.listele}" 
+														update="defterSayfa_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="defterSayfaListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.gizlilik}" sortBy="#{item.gizlilik}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.gizlilikStore, item.gizlilik)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.gizlilik}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gizlilik, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.gizlilikStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.tur}" sortBy="#{item.tur}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.defterSayfaTurStore, item.tur)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.tur}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.defterSayfaTurStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.sayfa_no}"
+								sortBy="#{item.sayfa_no}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.sayfa_no}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.sayfa_no}" 
+														value="#{item.sayfa_no}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.sayfa_no, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.defter_id}" sortBy="#{item.defter_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.defter_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.defter_id}"
+														value="#{item.defter_id}" 
+														completeMethod="#{defterSayfaController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.defter_no}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.defter_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="defterSayfaListesi:defterSayfaListesi" 
+										widgetVar="defterSayfaListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{defterSayfaController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('defterSayfa_guncelle')}" 
+										oncomplete="PF('defterSayfa_islem_dialog').show()" 
+										update="defterSayfa_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{defterSayfaController.sil}" 
+										rendered="#{sessionController.yetkiliMi('defterSayfa_sil')}" 
+										update="defterSayfa_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{defterSayfaController.listeBosalt()}" 
+										oncomplete="PF('defterSayfaListesiContextMenu').hide()" 
+										update="defterSayfa_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="defterSayfa_islem_dialog" 
+								header="#{labels.defterSayfa}" 
+								height="260"
+								widgetVar="defterSayfa_islem_dialog" 
+								iptalAction="#{defterSayfaController.iptal}" 
+								iptalUpdate="defterSayfa_form:tablo_panel" 
+								kaydetAction="#{defterSayfaController.kaydet('defterSayfa_islem_dialog')}" 
+								kaydetUpdate="defterSayfa_form,messages">
+
+					<p:outputLabel value="#{labels.gizlilik}" styleClass="koyu" />
+					<algan:store	value="#{defterSayfaController.secilen.gizlilik}" 
+									store="#{storeController.gizlilikStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gizlilik, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+					<algan:store	value="#{defterSayfaController.secilen.tur}" 
+									store="#{storeController.defterSayfaTurStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.sayfa_no}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.sayfa_no}" 
+										value="#{defterSayfaController.secilen.sayfa_no}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.sayfa_no, labels.zorunlu_alan_mesaji)}"
+										/>
+					<p:outputLabel value="#{labels.defter_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{defterSayfaController.sorguKriteri.defter_id}"
+										method="#{defterSayfaController.autoComplete}"
+										listItem="defterSayfa"
+										listItemValue="#{defterSayfa}"
+										listItemLabel="#{defterSayfa.defter_no}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.defter_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

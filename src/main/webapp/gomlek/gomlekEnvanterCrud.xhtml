@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.gomlekEnvanter}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.gomlekEnvanter}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="gomlekEnvanter_form">
+					<algan:detayliArama	form="gomlekEnvanter_form" 
+										clearAction="#{gomlekEnvanterController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.tespit_edilmis_belge_sayisi}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.tespit_edilmis_belge_sayisi}" 
+											value="#{gomlekEnvanterController.sorguKriteri.tespit_edilmis_belge_sayisi}" 
+											/>
+
+						<p:outputLabel value="#{labels.tespit_edilmis_sayfa_sayisi}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.tespit_edilmis_sayfa_sayisi}" 
+											value="#{gomlekEnvanterController.sorguKriteri.tespit_edilmis_sayfa_sayisi}" 
+											/>
+						<p:outputLabel value="#{labels.gomlek_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{gomlekEnvanterController.sorguKriteri.gomlek_id}"
+											method="#{gomlekEnvanterController.autoComplete}"
+											listItem="gomlekEnvanter"
+											listItemValue="#{gomlekEnvanter}"
+											listItemLabel="#{gomlekEnvanter.transkripsiyon}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="gomlekEnvanterListesi" 
+											widgetVar="gomlekEnvanterWidget" 
+											value="#{gomlekEnvanterController.list}" 
+											selection="#{gomlekEnvanterController.secilenListesi}" 
+											rowSelectUpdate="gomlekEnvanter_form:tablo_panel" 
+											cellEditAction="#{gomlekEnvanterController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{gomlekEnvanterController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('gomlekEnvanter_ekle')}" 
+																oncomplete="PF('gomlekEnvanter_islem_dialog').show()" 
+																update="gomlekEnvanter_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{gomlekEnvanterController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(gomlekEnvanterController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{gomlekEnvanterController.sil}" 
+															rendered="#{sessionController.yetkiliMi('gomlekEnvanter_sil')}" 
+															disabled="#{gomlekEnvanterController.secilenListesi == null or gomlekEnvanterController.secilenListesi.size() == 0}" 
+															update="gomlekEnvanter_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{gomlekEnvanterController.list.sorgu}" 
+																			clearAction="#{gomlekEnvanterController.formTemizle}" 
+																			update="gomlekEnvanter_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{gomlekEnvanterController.listele}" 
+														update="gomlekEnvanter_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="gomlekEnvanterListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.tespit_edilmis_belge_sayisi}"
+								sortBy="#{item.tespit_edilmis_belge_sayisi}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.tespit_edilmis_belge_sayisi}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.tespit_edilmis_belge_sayisi}" 
+														value="#{item.tespit_edilmis_belge_sayisi}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tespit_edilmis_belge_sayisi, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.tespit_edilmis_sayfa_sayisi}"
+								sortBy="#{item.tespit_edilmis_sayfa_sayisi}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.tespit_edilmis_sayfa_sayisi}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.tespit_edilmis_sayfa_sayisi}" 
+														value="#{item.tespit_edilmis_sayfa_sayisi}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tespit_edilmis_sayfa_sayisi, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.gomlek_id}" sortBy="#{item.gomlek_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.gomlek_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.gomlek_id}"
+														value="#{item.gomlek_id}" 
+														completeMethod="#{gomlekEnvanterController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.transkripsiyon}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gomlek_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="gomlekEnvanterListesi:gomlekEnvanterListesi" 
+										widgetVar="gomlekEnvanterListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{gomlekEnvanterController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('gomlekEnvanter_guncelle')}" 
+										oncomplete="PF('gomlekEnvanter_islem_dialog').show()" 
+										update="gomlekEnvanter_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{gomlekEnvanterController.sil}" 
+										rendered="#{sessionController.yetkiliMi('gomlekEnvanter_sil')}" 
+										update="gomlekEnvanter_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{gomlekEnvanterController.listeBosalt()}" 
+										oncomplete="PF('gomlekEnvanterListesiContextMenu').hide()" 
+										update="gomlekEnvanter_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="gomlekEnvanter_islem_dialog" 
+								header="#{labels.gomlekEnvanter}" 
+								height="260"
+								widgetVar="gomlekEnvanter_islem_dialog" 
+								iptalAction="#{gomlekEnvanterController.iptal}" 
+								iptalUpdate="gomlekEnvanter_form:tablo_panel" 
+								kaydetAction="#{gomlekEnvanterController.kaydet('gomlekEnvanter_islem_dialog')}" 
+								kaydetUpdate="gomlekEnvanter_form,messages">
+
+					<p:outputLabel value="#{labels.tespit_edilmis_belge_sayisi}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.tespit_edilmis_belge_sayisi}" 
+										value="#{gomlekEnvanterController.secilen.tespit_edilmis_belge_sayisi}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tespit_edilmis_belge_sayisi, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.tespit_edilmis_sayfa_sayisi}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.tespit_edilmis_sayfa_sayisi}" 
+										value="#{gomlekEnvanterController.secilen.tespit_edilmis_sayfa_sayisi}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tespit_edilmis_sayfa_sayisi, labels.zorunlu_alan_mesaji)}"
+										/>
+					<p:outputLabel value="#{labels.gomlek_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{gomlekEnvanterController.sorguKriteri.gomlek_id}"
+										method="#{gomlekEnvanterController.autoComplete}"
+										listItem="gomlekEnvanter"
+										listItemValue="#{gomlekEnvanter}"
+										listItemLabel="#{gomlekEnvanter.transkripsiyon}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gomlek_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

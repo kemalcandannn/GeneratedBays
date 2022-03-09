@@ -38,7 +38,8 @@ public class CustomFilter extends GenericFilterBean {
 	private void init() {
 		urlIslem = new HashMap<String, String>();
 		urlIslem.put("/ilce", "ilce_listesi_sayfasi");
-		urlIslem.put("/kullanici", "kullanici_listesi_sayfasi");
+		urlIslem.put("/kullanici", "kullanici_sayfasi");
+		urlIslem.put("/rol", "rol_sayfasi");
 	}
 
 	@Override

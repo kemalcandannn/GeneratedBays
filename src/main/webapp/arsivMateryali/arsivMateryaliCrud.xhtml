@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.arsivMateryali}</ui:define>
+	<ui:define name="viewname">
+		<p:menuitem value="#{labels.arsivMateryali}" />
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="arsivMateryali_form">
+					<algan:detayliArama	form="arsivMateryali_form" 
+										clearAction="#{arsivMateryaliController.formTemizle}" 
+										>
+
+						<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+						<algan:store	value="#{arsivMateryaliController.sorguKriteri.tur}" 
+										store="#{storeController.arsivMateryaliTurStore}" 
+										/>
+
+						<p:outputLabel value="#{labels.materyal_no}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.materyal_no}" 
+											value="#{arsivMateryaliController.sorguKriteri.materyal_no}" 
+											/>
+
+						<p:outputLabel value="#{labels.ek_no}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ek_no}" 
+											value="#{arsivMateryaliController.sorguKriteri.ek_no}" 
+											/>
+
+						<p:outputLabel value="#{labels.gizlilik}" styleClass="koyu" />
+						<algan:store	value="#{arsivMateryaliController.sorguKriteri.gizlilik}" 
+										store="#{storeController.gizlilikStore}" 
+										/>
+						<p:outputLabel value="#{labels.fon_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{arsivMateryaliController.sorguKriteri.fon_id}"
+											method="#{arsivMateryaliController.autoComplete}"
+											listItem="arsivMateryali"
+											listItemValue="#{arsivMateryali}"
+											listItemLabel="#{arsivMateryali.ad}"
+											/>
+
+						<p:outputLabel value="#{labels.depo_id}" styleClass="koyu" />
+						<algan:autoComplete	value="#{arsivMateryaliController.sorguKriteri.depo_id}"
+											method="#{arsivMateryaliController.autoComplete}"
+											listItem="arsivMateryali"
+											listItemValue="#{arsivMateryali}"
+											listItemLabel="#{arsivMateryali.ad}"
+											/>
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel">
+
+						<algan:datatable	id="arsivMateryaliListesi" 
+											widgetVar="arsivMateryaliWidget" 
+											value="#{arsivMateryaliController.list}" 
+											selection="#{arsivMateryaliController.secilenListesi}" 
+											rowSelectUpdate="arsivMateryali_form:tablo_panel" 
+											cellEditAction="#{arsivMateryaliController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+
+											<algan:ekleButon	action="#{arsivMateryaliController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('arsivMateryali_ekle')}" 
+																oncomplete="PF('arsivMateryali_islem_dialog').show()" 
+																update="arsivMateryali_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{arsivMateryaliController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(arsivMateryaliController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{arsivMateryaliController.sil}" 
+															rendered="#{sessionController.yetkiliMi('arsivMateryali_sil')}" 
+															disabled="#{arsivMateryaliController.secilenListesi == null or arsivMateryaliController.secilenListesi.size() == 0}" 
+															update="arsivMateryali_form:tablo_panel,messages" 
+															/>
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	value="#{arsivMateryaliController.list.sorgu}" 
+																			placeholder="#{labels.materyal_no} | #{labels.ek_no} | "
+																			clearAction="#{arsivMateryaliController.formTemizle}" 
+																			update="arsivMateryali_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{arsivMateryaliController.listele}" 
+														update="arsivMateryali_form:tablo_panel" 
+														/>
+
+										<algan:columnTogglerButon id="toggler" />
+										<p:columnToggler datasource="arsivMateryaliListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column visible="true" headerText="#{labels.tur}" sortBy="#{item.tur}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.arsivMateryaliTurStore, item.tur)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.tur}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.arsivMateryaliTurStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.materyal_no}"
+								sortBy="#{item.materyal_no}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.materyal_no}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.materyal_no}" 
+														value="#{item.materyal_no}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.materyal_no, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.ek_no}"
+								sortBy="#{item.ek_no}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ek_no}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ek_no}" 
+														value="#{item.ek_no}" 
+														required="false" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ek_no, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="true" headerText="#{labels.gizlilik}" sortBy="#{item.gizlilik}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.gizlilikStore, item.gizlilik)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneMenu	value="#{item.gizlilik}" 
+															filter="#{true}" 
+															effect="fade" 
+															required="true"
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gizlilik, labels.zorunlu_alan_mesaji)}">
+
+														<f:selectItem itemLabel="#{labels.seciniz}" itemValue="" />
+														<f:selectItems	value="#{storeController.gizlilikStore}" />
+										</p:selectOneMenu>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+							<p:column headerText="#{labels.fon_id}" sortBy="#{item.fon_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.fon_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.fon_id}"
+														value="#{item.fon_id}" 
+														completeMethod="#{arsivMateryaliController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.fon_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.depo_id}" sortBy="#{item.depo_id}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.depo_id}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:autoComplete	placeholder="#{labels.depo_id}"
+														value="#{item.depo_id}" 
+														completeMethod="#{arsivMateryaliController.autoComplete}" 
+														var="item" 
+														itemLabel="#{item.ad}" 
+														itemValue="#{item}" 
+														converter="#{selectItemsConverter}" 
+														forceSelection="#{true}" 
+														dropdown="#{true}" 
+														required="true"
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_id, labels.zorunlu_alan_mesaji)}"
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="arsivMateryaliListesi:arsivMateryaliListesi" 
+										widgetVar="arsivMateryaliListesiContextMenu">
+
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{arsivMateryaliController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('arsivMateryali_guncelle')}" 
+										oncomplete="PF('arsivMateryali_islem_dialog').show()" 
+										update="arsivMateryali_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{arsivMateryaliController.sil}" 
+										rendered="#{sessionController.yetkiliMi('arsivMateryali_sil')}" 
+										update="arsivMateryali_form:tablo_panel,messages">
+
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{arsivMateryaliController.listeBosalt()}" 
+										oncomplete="PF('arsivMateryaliListesiContextMenu').hide()" 
+										update="arsivMateryali_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="arsivMateryali_islem_dialog" 
+								header="#{labels.arsivMateryali}" 
+								height="260"
+								widgetVar="arsivMateryali_islem_dialog" 
+								iptalAction="#{arsivMateryaliController.iptal}" 
+								iptalUpdate="arsivMateryali_form:tablo_panel" 
+								kaydetAction="#{arsivMateryaliController.kaydet('arsivMateryali_islem_dialog')}" 
+								kaydetUpdate="arsivMateryali_form,messages">
+
+					<p:outputLabel value="#{labels.tur}" styleClass="koyu" />
+					<algan:store	value="#{arsivMateryaliController.secilen.tur}" 
+									store="#{storeController.arsivMateryaliTurStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tur, labels.zorunlu_alan_mesaji)}"
+									/>
+
+					<p:outputLabel value="#{labels.materyal_no}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.materyal_no}" 
+										value="#{arsivMateryaliController.secilen.materyal_no}" 
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.materyal_no, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.ek_no}" styleClass="koyu" />
+					<algan:inputText	placeholder="#{labels.ek_no}" 
+										value="#{arsivMateryaliController.secilen.ek_no}" 
+										required="false"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ek_no, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.gizlilik}" styleClass="koyu" />
+					<algan:store	value="#{arsivMateryaliController.secilen.gizlilik}" 
+									store="#{storeController.gizlilikStore}" 
+									required="true"
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.gizlilik, labels.zorunlu_alan_mesaji)}"
+									/>
+					<p:outputLabel value="#{labels.fon_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{arsivMateryaliController.sorguKriteri.fon_id}"
+										method="#{arsivMateryaliController.autoComplete}"
+										listItem="arsivMateryali"
+										listItemValue="#{arsivMateryali}"
+										listItemLabel="#{arsivMateryali.ad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.fon_id, labels.zorunlu_alan_mesaji)}"
+										/>
+
+					<p:outputLabel value="#{labels.depo_id}" styleClass="koyu" />
+					<algan:autoComplete	value="#{arsivMateryaliController.sorguKriteri.depo_id}"
+										method="#{arsivMateryaliController.autoComplete}"
+										listItem="arsivMateryali"
+										listItemValue="#{arsivMateryali}"
+										listItemLabel="#{arsivMateryali.ad}"
+										required="true"
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.depo_id, labels.zorunlu_alan_mesaji)}"
+										/>
+				</algan:crudForm>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

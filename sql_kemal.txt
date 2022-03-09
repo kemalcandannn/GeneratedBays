@@ -1,46 +1,61 @@
-------------------------------------------------------------------------
---------------------------- 12/01/2022 11:30 ---------------------------
-------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------- 09/03/2022 17:08 ---------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------
 
-DROP DATABASE bays;
-CREATE DATABASE bays
-    WITH 
-    OWNER = postgres
-	TEMPLATE = 'template0'
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'tr_TR.UTF8'
-    LC_CTYPE = 'tr_TR.UTF8'
-    TABLESPACE = pg_default
-    CONNECTION LIMIT = -1;
+alter table db_log add column version Bigint not null default 0;
+alter table birim add column version Bigint not null default 0;
+alter table kullanici add column version Bigint not null default 0;
+alter table depo add column version Bigint not null default 0;
+alter table klasor_tarihce_log add column version Bigint not null default 0;
+alter table gomlek add column version Bigint not null default 0;
+alter table defter add column version Bigint not null default 0;
+alter table gomlek_tarihce_log add column version Bigint not null default 0;
+alter table defter_tarihce_log add column version Bigint not null default 0;
+alter table defter_sayfa_tarihce_log add column version Bigint not null default 0;
+alter table defter_alan add column version Bigint not null default 0;
+alter table defter_sayfa_alan add column version Bigint not null default 0;
+alter table arsiv_materyali_alan add column version Bigint not null default 0;
+alter table arsiv_materyali add column version Bigint not null default 0;
+alter table depo_talep add column version Bigint not null default 0;
+alter table depo_talep_tarihce_log add column version Bigint not null default 0;
+alter table depo_kullanici add column version Bigint not null default 0;
+alter table toplu_tasima add column version Bigint not null default 0;
+alter table ham_evrak_birim add column version Bigint not null default 0;
+alter table arsiv_kurumu add column version Bigint not null default 0;
+alter table arsiv_kurumu_alan add column version Bigint not null default 0;
+alter table fon add column version Bigint not null default 0;
+alter table rol add column version Bigint not null default 0;
+alter table rol_islem add column version Bigint not null default 0;
+alter table kullanici_rol add column version Bigint not null default 0;
+alter table islem add column version Bigint not null default 0;
+alter table sozluk add column version Bigint not null default 0;
+alter table sozluk_madde add column version Bigint not null default 0;
+alter table arsiv_sahibi_personel_onay_log add column version Bigint not null default 0;
+alter table fon_oncul_veri_log add column version Bigint not null default 0;
+alter table gomlek_bakim add column version Bigint not null default 0;
+alter table calisma_grubu_uye add column version Bigint not null default 0;
+alter table depo_ici_tasima add column version Bigint not null default 0;
+alter table kullanici_hesap add column version Bigint not null default 0;
+alter table metadata_seti add column version Bigint not null default 0;
+alter table alan add column version Bigint not null default 0;
+alter table fon_metadata_seti add column version Bigint not null default 0;
+alter table fon_alan add column version Bigint not null default 0;
+alter table klasor_alan add column version Bigint not null default 0;
+alter table gomlek_alan add column version Bigint not null default 0;
+alter table islenmemis_klasor_alan add column version Bigint not null default 0;
+alter table depo_alan add column version Bigint not null default 0;
+alter table arsiv_sahibi add column version Bigint not null default 0;
+alter table arsiv_sahibi_personel add column version Bigint not null default 0;
+alter table personel_hesap_bilgileri add column version Bigint not null default 0;
+alter table klasor add column version Bigint not null default 0;
+alter table islenmemis_klasor add column version Bigint not null default 0;
+alter table calisma_grubu add column version Bigint not null default 0;
+alter table ham_evrak add column version Bigint not null default 0;
+alter table klasor_envanter add column version Bigint not null default 0;
+alter table depo_talep_malzeme add column version Bigint not null default 0;
+alter table toplu_tasima_malzeme add column version Bigint not null default 0;
+alter table gomlek_bakim_klasor add column version Bigint not null default 0;
+alter table gomlek_envanter add column version Bigint not null default 0;
+alter table defter_sayfa add column version Bigint not null default 0;
 
-CREATE SEQUENCE public.hibernate_sequence INCREMENT 1 START 1 MINVALUE 1;
-
-CREATE TABLE kullanici (
-	id SERIAL PRIMARY KEY,
-	kullanici_adi VARCHAR UNIQUE NOT NULL,
-	parola VARCHAR NOT NULL,
-	parola_degistir SMALLINT NOT NULL DEFAULT 0,
-	parola_degistirme_tarihi TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	tc_kimlik_no CHAR(11) NOT NULL,
-	ad VARCHAR NOT NULL,
-	soyad VARCHAR NOT NULL,
-	cinsiyet SMALLINT NOT NULL DEFAULT 0,
-	dogum_tarihi TIMESTAMP,
-	version BIGINT NOT NULL DEFAULT 0,
-);
-
-CREATE TABLE kullanici_iletisim (
-	id SERIAL PRIMARY KEY,
-	kullanici_id INTEGER NOT NULL,
-	aktif SMALLINT NOT NULL,
-	eposta VARCHAR UNIQUE,
-	cep_telefonu VARCHAR UNIQUE,
-	version BIGINT NOT NULL DEFAULT 0,
-	
-	FOREIGN KEY (kullanici_id) 
-	REFERENCES kullanici (id) 
-	ON UPDATE CASCADE 
-	ON DELETE CASCADE
-);
-CREATE INDEX ON kullanici_iletisim (kullanici_id);
-
+alter table db_log rename db_log_pk to id;
