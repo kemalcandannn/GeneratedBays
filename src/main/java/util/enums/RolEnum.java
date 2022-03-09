@@ -3,7 +3,7 @@ package util.enums;
 import util.BaysResource;
 
 public enum RolEnum {
-	SISTEM_YONETICISI (-1L, BaysResource.get("sistem_yoneticisi"));
+	SISTEM_YONETICISI (-1L, "Sistem Yöneticisi");
 
 	private final long value;
 	private final String label;

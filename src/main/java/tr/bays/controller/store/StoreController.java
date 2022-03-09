@@ -7,67 +7,247 @@ import javax.faces.model.SelectItem;
 
 import tr.bays.BaysJsfController;
 import util.enums.AktifEnum;
-import util.enums.CinsiyetEnum;
-import util.enums.EvetHayirEnum;
-import util.enums.GerekliEnum;
-import util.enums.HataKodlariEnum;
-import util.enums.RolEnum;
+import util.enums.GizlilikEnum;
+import util.enums.DefterSayfaTurEnum;
+import util.enums.DepoTalepDurumEnum;
+import util.enums.HamEvrakBirimYonEnum;
+import util.enums.ArsivMateryaliTurEnum;
+import util.enums.OnayEnum;
+import util.enums.GomlekDefterTarihTurEnum;
+import util.enums.GomlekBakimKlasorDurumEnum;
+import util.enums.HamEvrakSaklanmaTuruEnum;
+import util.enums.ArsivSahibiustKurumIliskiEnum;
+import util.enums.DepoTalepMalzemeTurEnum;
+import util.enums.CalismaGozuEnum;
+import util.enums.CalismaGrubuDurumEnum;
+import util.enums.CrudEnum;
+import util.enums.MetadataSetiTurEnum;
+import util.enums.DepoTaleptarihceLogTurEnum;
+import util.enums.TopluTasimaMalzemeTurEnum;
+import util.enums.ArsivSahibiTurEnum;
+import util.enums.GomlekRestorasyonIhtiyaciEnum;
+import util.enums.OnayRedEnum;
+import util.enums.FonTurEnum;
+import util.enums.GomlekBakimDurumEnum;
+import util.enums.SozlukKullanimSekliEnum;
 
 @BaysJsfController
 public class StoreController {
 
-	public List<SelectItem> getAktifStore() {
-		List<SelectItem> aktifStore = new ArrayList<SelectItem>();
-		for (AktifEnum aktifEnum : AktifEnum.values()) {
-			aktifStore.add(new SelectItem(aktifEnum.getValue(), aktifEnum.getLabel()));
+	public List<SelectItem> getAktifStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (AktifEnum enumElement : AktifEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
 		}
 
-		return aktifStore;
+		return store;
 	}
 
-	public List<SelectItem> getCinsiyetStore() {
-		List<SelectItem> cinsiyetStore = new ArrayList<SelectItem>();
-		for (CinsiyetEnum cinsiyetEnum : CinsiyetEnum.values()) {
-			cinsiyetStore.add(new SelectItem(cinsiyetEnum.getValue(), cinsiyetEnum.getLabel()));
+	public List<SelectItem> getCrudStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (CrudEnum enumElement : CrudEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
 		}
 
-		return cinsiyetStore;
+		return store;
 	}
 
-	public List<SelectItem> getEvetHayirStore() {
-		List<SelectItem> evetHayirStore = new ArrayList<SelectItem>();
-		for (EvetHayirEnum evetHayirEnum : EvetHayirEnum.values()) {
-			evetHayirStore.add(new SelectItem(evetHayirEnum.getValue(), evetHayirEnum.getLabel()));
+	public List<SelectItem> getGizlilikStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (GizlilikEnum enumElement : GizlilikEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
 		}
 
-		return evetHayirStore;
+		return store;
 	}
 
-	public List<SelectItem> getGerekliStore() {
-		List<SelectItem> gerekliStore = new ArrayList<SelectItem>();
-		for (GerekliEnum gerekliEnum : GerekliEnum.values()) {
-			gerekliStore.add(new SelectItem(gerekliEnum.getValue(), gerekliEnum.getLabel()));
+	public List<SelectItem> getDefterSayfaTurStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (DefterSayfaTurEnum enumElement : DefterSayfaTurEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
 		}
 
-		return gerekliStore;
+		return store;
 	}
 
-	public List<SelectItem> getHataKodlariStore() {
-		List<SelectItem> hataKodlariStore = new ArrayList<SelectItem>();
-		for (HataKodlariEnum hataKodlariEnum : HataKodlariEnum.values()) {
-			hataKodlariStore.add(new SelectItem(hataKodlariEnum.getValue(), hataKodlariEnum.getLabel()));
+	public List<SelectItem> getDepoTalepDurumStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (DepoTalepDurumEnum enumElement : DepoTalepDurumEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
 		}
 
-		return hataKodlariStore;
+		return store;
 	}
 
-	public List<SelectItem> getRolStore() {
-		List<SelectItem> rolStore = new ArrayList<SelectItem>();
-		for (RolEnum rolEnum : RolEnum.values()) {
-			rolStore.add(new SelectItem(rolEnum.getValue(), rolEnum.getLabel()));
+	public List<SelectItem> getHamEvrakBirimYonStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (HamEvrakBirimYonEnum enumElement : HamEvrakBirimYonEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
 		}
 
-		return rolStore;
+		return store;
+	}
+
+	public List<SelectItem> getArsivMateryaliTurStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (ArsivMateryaliTurEnum enumElement : ArsivMateryaliTurEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getOnayStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (OnayEnum enumElement : OnayEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getGomlekDefterTarihTurStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (GomlekDefterTarihTurEnum enumElement : GomlekDefterTarihTurEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getGomlekBakimKlasorDurumStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (GomlekBakimKlasorDurumEnum enumElement : GomlekBakimKlasorDurumEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getHamEvrakSaklanmaTuruStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (HamEvrakSaklanmaTuruEnum enumElement : HamEvrakSaklanmaTuruEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getArsivSahibiustKurumIliskiStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (ArsivSahibiustKurumIliskiEnum enumElement : ArsivSahibiustKurumIliskiEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getDepoTalepMalzemeTurStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (DepoTalepMalzemeTurEnum enumElement : DepoTalepMalzemeTurEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getCalismaGozuStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (CalismaGozuEnum enumElement : CalismaGozuEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getCalismaGrubuDurumStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (CalismaGrubuDurumEnum enumElement : CalismaGrubuDurumEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getMetadataSetiTurStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (MetadataSetiTurEnum enumElement : MetadataSetiTurEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getDepoTaleptarihceLogTurStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (DepoTaleptarihceLogTurEnum enumElement : DepoTaleptarihceLogTurEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getTopluTasimaMalzemeTurStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (TopluTasimaMalzemeTurEnum enumElement : TopluTasimaMalzemeTurEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getArsivSahibiTurStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (ArsivSahibiTurEnum enumElement : ArsivSahibiTurEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getGomlekRestorasyonIhtiyaciStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (GomlekRestorasyonIhtiyaciEnum enumElement : GomlekRestorasyonIhtiyaciEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getOnayRedStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (OnayRedEnum enumElement : OnayRedEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getFonTurStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (FonTurEnum enumElement : FonTurEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getGomlekBakimDurumStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (GomlekBakimDurumEnum enumElement : GomlekBakimDurumEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
+	}
+
+	public List<SelectItem> getSozlukKullanimSekliStoreStore() {
+		List<SelectItem> store = new ArrayList<SelectItem>();
+		for (SozlukKullanimSekliEnum enumElement : SozlukKullanimSekliEnum.values()) {
+			store.add(new SelectItem(enumElement.getValue(), enumElement.getLabel()));
+		}
+
+		return store;
 	}
 
 	public String getLabel(List<SelectItem> store, int value) {
@@ -87,3 +267,4 @@ public class StoreController {
 	}
 
 }
+

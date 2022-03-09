@@ -3,9 +3,9 @@ package util.enums;
 import util.BaysResource;
 
 public enum BuyukKucukHarfEnum {
-	KUCUK (1, BaysResource.get("kucuk")), 
-	OLDUGU_GIBI (2, BaysResource.get("oldugu_gibi")),
-	BUYUK (3, BaysResource.get("buyuk"));
+	KUCUK (1, "Küçük"), 
+	OLDUGU_GIBI (2, "Olduğu Gibi"),
+	BUYUK (3, "Büyük");
 
 	private final int value;
 	private final String label;

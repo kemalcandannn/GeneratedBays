@@ -3,8 +3,8 @@ package util.enums;
 import util.BaysResource;
 
 public enum CinsiyetEnum {
-	ERKEK (1, BaysResource.get("erkek")), 
-	KADIN (2, BaysResource.get("kadin"));
+	ERKEK (1, "Erkek"), 
+	KADIN (2, "Kadın");
 
 	private final int value;
 	private final String label;

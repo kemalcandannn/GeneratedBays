@@ -3,9 +3,9 @@ package util.enums;
 import util.BaysResource;
 
 public enum HataKodlariEnum {
-	INFO (1, "INFO", BaysResource.get("bilgi")), 
-	WARNING (2, "WARNING", BaysResource.get("uyari")),
-	ERROR (3, "ERROR", BaysResource.get("hata"));
+	INFO (1, "INFO", "Bilgi"), 
+	WARNING (2, "WARNING", "Uyarı"),
+	ERROR (3, "ERROR", "Hata");
 
 	private int value;
 	private String name;

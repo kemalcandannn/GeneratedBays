@@ -1,13 +1,14 @@
 package util.enums;
 
-public enum AktifEnum {
-	AKTIF (1, "Aktif"), 
-	PASIF (2, "Pasif");
+public enum GomlekBakimDurumEnum {
+	TALEP_EDILDI (1, "Talep Edildi"), 
+	ATANDI (2, "Atandı"), 
+	GOMLEK_YENILENDI (3, "Gömlek Yenilendi");
 
 	private final int value;
 	private final String label;
 
-	AktifEnum(int value, String label) {
+	GomlekBakimDurumEnum(int value, String label) {
 		this.value = value;
 		this.label = label;
 	}
@@ -23,7 +24,7 @@ public enum AktifEnum {
 	public static String getLabel(int val) {
 		String label = "";
 
-		for (AktifEnum enumElement : AktifEnum.values()) {
+		for (GomlekBakimDurumEnum enumElement : GomlekBakimDurumEnum.values()) {
 			if (enumElement.getValue() == val) {
 				label = enumElement.getLabel();
 				break;

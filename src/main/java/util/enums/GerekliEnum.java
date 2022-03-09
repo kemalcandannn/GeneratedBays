@@ -3,8 +3,8 @@ package util.enums;
 import util.BaysResource;
 
 public enum GerekliEnum {
-	GEREKLI (1, BaysResource.get("gerekli")), 
-	GEREKSIZ (2, BaysResource.get("gereksiz"));
+	GEREKLI (1, "Gerekli"), 
+	GEREKSIZ (2, "Gereksiz");
 
 	private final int value;
 	private final String label;
