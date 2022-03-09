@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:composite="http://java.sun.com/jsf/composite"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents">
+
+	<composite:interface>
+		<composite:attribute name="placeholder" />
+		<composite:attribute name="value" />
+		<composite:attribute name="clearAction" method-signature="void action()" />
+		<composite:attribute name="update" />
+	</composite:interface>
+	
+	<composite:implementation>
+		<algan:inputText	placeholder="#{cc.attrs.placeholder}" 
+							styleClass="borderRight0" 
+							value="#{cc.attrs.value}" 
+							/>
+
+		<algan:buton	icon="pi pi-times" 
+						styleClass="ui-button-secondary borderLeft0 marginRight5" 
+						action="#{cc.attrs.clearAction}" 
+						update="#{cc.attrs.update}" 
+						/>
+
+	</composite:implementation>
+</html>

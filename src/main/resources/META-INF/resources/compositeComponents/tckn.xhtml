@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:composite="http://java.sun.com/jsf/composite"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<composite:interface>
+		<composite:attribute name="autoClear" default="#{true}" />
+		<composite:attribute name="mask" default="99999999999" />
+		<composite:attribute name="placeholder" default="#{labels.tc_kimlik_no}" />
+		<composite:attribute name="required" default="#{false}" />
+		<composite:attribute name="requiredMessage" default="" />
+		<composite:attribute name="value" required="#{true}" />
+	</composite:interface>
+	
+	<composite:implementation>
+		<p:inputMask	placeholder="#{cc.attrs.placeholder}"
+						style="border-radius: 3px; margin-right: 2px;"
+						value="#{cc.attrs.value}" 
+						mask="#{cc.attrs.mask}" 
+						autoClear="#{cc.attrs.autoClear}" 
+						required="#{cc.attrs.required}" 
+						requiredMessage="#{cc.attrs.requiredMessage}" 
+		/>
+	</composite:implementation>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:composite="http://java.sun.com/jsf/composite"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<composite:interface>
+		<composite:attribute name="placeholder" default="#{labels.eposta}" />
+		<composite:attribute name="regex" default="^(([\w-\.]+@([\w-]+\.)+[\w-]{2,4})|( )*)$" />
+		<composite:attribute name="required" default="#{false}" />
+		<composite:attribute name="requiredMessage" default="#{hataKodlariController.hataMesajiGetir(1, labels.eposta, labels.zorunlu_alan_mesaji)}" />
+		<composite:attribute name="validatorMessage" default="#{hataKodlariController.hataMesajiGetir(13)}" />
+		<composite:attribute name="value" required="#{true}" />
+	</composite:interface>
+	
+	<composite:implementation>
+		<p:inputText	placeholder="#{cc.attrs.placeholder}" 
+						styleClass="kucukHarf" 
+						converter="toLowerCaseConverter" 
+						value="#{cc.attrs.value}" 
+						required="#{cc.attrs.required}" 
+						requiredMessage="#{cc.attrs.requiredMessage}" 
+						validatorMessage="#{cc.attrs.validatorMessage}"
+		>
+	
+			<f:validateRegex	pattern="#{cc.attrs.regex}" />
+		</p:inputText>
+	</composite:implementation>
+</html>

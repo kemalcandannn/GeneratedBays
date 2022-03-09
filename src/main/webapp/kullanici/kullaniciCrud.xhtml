@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents"
+				template="/WEB-INF/layout.xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">#{labels.kullanicilar}</ui:define>
+	<ui:define name="viewname">
+		<c:if test="#{!kullaniciIletisimController.panel}">
+			<p:menuitem value="#{labels.kullanicilar}" />
+		</c:if>
+
+		<c:if test="#{kullaniciIletisimController.panel}">
+			<p:menuitem value="#{labels.kullanicilar}" action="#{kullaniciIletisimController.geri()}" update="kullaniciIletisimPanel,kullanici_form,breadcrump_form" />
+			<p:menuitem value="#{labels.iletisim_bilgileri}" />
+		</c:if>
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="dashboard">
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<h:form id="kullanici_form">
+					<algan:detayliArama	form="kullanici_form" 
+										clearAction="#{kullaniciController.formTemizle}" 
+										rendered="#{!kullaniciIletisimController.panel}"
+										>
+
+						<p:outputLabel	value="#{labels.tc_kimlik_no}" styleClass="koyu" />
+						<algan:tckn	value="#{kullaniciController.sorguKriteri.tc_kimlik_no}" 
+									/>
+
+						<p:outputLabel	value="#{labels.kullanici_adi}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.kullanici_adi}" 
+											value="#{kullaniciController.sorguKriteri.kullanici_adi}" 
+											/>
+
+						<p:outputLabel	value="#{labels.ad}" styleClass="koyu" />
+						<algan:inputText	placeholder="#{labels.ad}" 
+											value="#{kullaniciController.sorguKriteri.ad}" 
+											/>
+
+						<p:outputLabel	value="#{labels.soyad}" styleClass="koyu" />
+						<algan:inputText	id="soyad" 
+											placeholder="#{labels.soyad}" 
+											value="#{kullaniciController.sorguKriteri.soyad}" 
+											/>
+
+						<p:outputLabel	value="#{labels.cinsiyet}" styleClass="koyu" />
+						<algan:radio	value="#{kullaniciController.sorguKriteri.cinsiyet}" 
+										store="#{storeController.cinsiyetStore}" 
+										/>
+
+						<p:outputLabel	value="#{labels.dogum_tarihi}" styleClass="koyu" />
+						<algan:tarih	placeholder="#{labels.dogum_tarihi}" 
+										value="#{kullaniciController.sorguKriteri.dogum_tarihi}" 
+										/>
+											
+						<p:outputLabel	value="#{labels.parola_degistir}" styleClass="koyu" />
+						<algan:store	value="#{kullaniciController.sorguKriteri.parola_degistir}" 
+										store="#{storeController.gerekliStore}" 
+										/>
+										
+						<p:outputLabel	value="#{labels.parola_degistirme_tarihi}" styleClass="koyu" />
+						<algan:tarih	placeholder="#{labels.parola_degistirme_tarihi}" 
+										value="#{kullaniciController.sorguKriteri.parola_degistirme_tarihi}" 
+										/>
+					
+					</algan:detayliArama>
+
+					<p:panel	id="tablo_panel" 
+								rendered="#{!kullaniciIletisimController.panel}">
+						
+						<algan:datatable	id="kullaniciListesi" 
+											widgetVar="kullaniciWidget" 
+											value="#{kullaniciController.list}" 
+											selection="#{kullaniciController.secilenListesi}" 
+											rowSelectUpdate="kullanici_form:tablo_panel" 
+											cellEditAction="#{kullaniciController.onCellEdit}" 
+											cellEditUpdate="messages">
+
+							<f:facet name="header">
+								<div class="ui-g">
+									<div class="ui-g-6 sola_yasla">
+										<p:outputPanel id="crud_button">
+											
+											<algan:ekleButon	action="#{kullaniciController.ekleFormAc}" 
+																rendered="#{sessionController.yetkiliMi('kullanici_ekle')}" 
+																oncomplete="PF('kullanici_islem_dialog').show()" 
+																update="kullanici_islem_dialog:crud_form" 
+																/>
+
+											<algan:silButon	value="#{kullaniciController.secilenListesi.size() > 0 ? labels.sil.concat(' (').concat(kullaniciController.secilenListesi.size().toString()).concat(' ').concat(labels.secildi).concat(')') : labels.sil}" 
+															action="#{kullaniciController.sil}" 
+															rendered="#{sessionController.yetkiliMi('kullanici_sil')}" 
+															disabled="#{kullaniciController.secilenListesi == null or kullaniciController.secilenListesi.size() == 0}" 
+															update="kullanici_form:tablo_panel,messages" 
+															/>
+
+<!-- 											<algan:guncelleButon	action="#{kullaniciController.guncelleFormAc}"  -->
+<!-- 																	disabled="#{kullaniciController.secilenListesi == null or kullaniciController.secilenListesi.size() != 1}"  -->
+<!-- 																	rendered="#{sessionController.yetkiliMi('kullanici_guncelle')}"  -->
+<!-- 																	oncomplete="PF('kullanici_islem_dialog').show()"  -->
+<!-- 																	update="kullanici_islem_dialog:crud_form"  -->
+<!-- 																	/> -->
+
+<!-- 											<algan:buton	value="#{labels.iletisim_bilgileri}" -->
+<!-- 															action="#{kullaniciIletisimController.tabloFormAc(kullaniciController.secilenListesi.get(0))}"  -->
+<!-- 															disabled="#{kullaniciController.secilenListesi == null or kullaniciController.secilenListesi.size() != 1}"  -->
+<!-- 															rendered="#{sessionController.yetkiliMi('kullanici_iletisim_bilgileri')}"  -->
+<!-- 															update="kullanici_form,kullaniciIletisimPanel,breadcrump_form"  -->
+<!-- 															/> -->
+
+										</p:outputPanel>
+									</div>
+									<div class="ui-g-6 saga_yasla">
+										<algan:gelismisAramaSorgulamaPanel	placeholder="#{labels.ad} | #{labels.soyad} | #{labels.kullanici_adi}" 
+																			value="#{kullaniciController.list.sorgu}" 
+																			clearAction="#{kullaniciController.formTemizle}" 
+																			update="kullanici_form" />
+
+										<algan:buton	value="#{labels.sorgula}" 
+														action="#{kullaniciController.listele}" 
+														update="kullanici_form:tablo_panel" 
+														/>
+										
+										<algan:columnTogglerButon id="toggler" />
+ 										<p:columnToggler datasource="kullaniciListesi" trigger="toggler:toggler" />
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column headerText="#{labels.tc_kimlik_no}" sortBy="#{item.tc_kimlik_no}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.tc_kimlik_no}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputMask	placeholder="#{labels.tc_kimlik_no}"
+														value="#{item.tc_kimlik_no}" 
+														mask="99999999999" 
+														autoClear="#{true}" 
+														required="#{true}" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tc_kimlik_no, labels.zorunlu_alan_mesaji)}" 
+										/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column visible="false" headerText="#{labels.kullanici_adi}"
+								sortBy="#{item.kullanici_adi}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.kullanici_adi}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.kullanici_adi}" 
+														value="#{item.kullanici_adi}" 
+														required="#{true}" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kullanici_adi, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.ad}" sortBy="#{item.ad}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.ad}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.ad}" 
+														value="#{item.ad}" 
+														required="#{true}" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.soyad}" sortBy="#{item.soyad}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.soyad}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText	placeholder="#{labels.soyad}" 
+														value="#{item.soyad}" 
+														required="#{true}" 
+														requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.soyad, labels.zorunlu_alan_mesaji)}" 
+														/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.cinsiyet}" sortBy="#{item.cinsiyet}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{storeController.getLabel(storeController.cinsiyetStore, item.cinsiyet)}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:selectOneRadio	value="#{item.cinsiyet}" 
+															layout="grid" 
+															columns="2" 
+															required="#{true}" 
+															requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.cinsiyet, labels.zorunlu_alan_mesaji)}"
+															>
+											
+											<f:selectItems	value="#{storeController.cinsiyetStore}" />
+										</p:selectOneRadio>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+
+							<p:column headerText="#{labels.dogum_tarihi}" sortBy="#{item.dogum_tarihi}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText value="#{item.dogum_tarihi}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</f:facet>
+									<f:facet name="input">
+										<p:calendar	placeholder="#{labels.dogum_tarihi}" 
+													value="#{item.dogum_tarihi}" 
+													locale="tr" 
+													lang="tr" 
+													pattern="dd/MM/yyyy" 
+													mask="#{true}" 
+													converterMessage="#{labels.tarih_format_uyarisi}" 
+													validatorMessage="#{labels.tarih_kosul_uyarisi}" 
+													readonlyInput="#{false}" 
+													required="false" 
+													requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.dogum_tarihi, labels.zorunlu_alan_mesaji)}" 
+													/>
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
+						</algan:datatable>
+						<p:contextMenu	for="kullaniciListesi:kullaniciListesi" 
+										widgetVar="kullaniciListesiContextMenu">
+										
+							<p:menuitem	value="#{labels.guncelle}" 
+										icon="pi pi-pencil" 
+										action="#{kullaniciController.guncelleFormAc}" 
+										rendered="#{sessionController.yetkiliMi('kullanici_guncelle')}" 
+										oncomplete="PF('kullanici_islem_dialog').show()" 
+										update="kullanici_islem_dialog:crud_form" 
+										/>
+
+							<p:menuitem	value="#{labels.sil}" 
+										icon="pi pi-trash" 
+										action="#{kullaniciController.sil}" 
+										rendered="#{sessionController.yetkiliMi('kullanici_sil')}" 
+										update="kullanici_form:tablo_panel,messages">
+										
+								<p:confirm	header="#{labels.onay}" 
+											icon="pi pi-info-circle" 
+											message="#{labels.onay_mesaji}" 
+											disabled="#{false}" 
+											/>
+							</p:menuitem>
+
+							<p:menuitem	value="#{labels.iletisim_bilgileri}" 
+										icon="pi pi-pencil" 
+										action="#{kullaniciIletisimController.tabloFormAc(kullaniciController.secilenListesi.get(0))}" 
+										rendered="#{sessionController.yetkiliMi('kullanici_iletisim_bilgileri')}" 
+										update="kullanici_form,kullaniciIletisimPanel,breadcrump_form" 
+										/>
+
+							<p:menuitem	value="#{labels.iptal}" 
+										icon="pi pi-times-circle" 
+										action="#{kullaniciController.listeBosalt()}" 
+										oncomplete="PF('kullaniciListesiContextMenu').hide()" 
+										update="kullanici_form:tablo_panel" 
+										/>
+
+						</p:contextMenu>
+					</p:panel>
+
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</h:form>
+
+				<algan:crudForm	id="kullanici_islem_dialog" 
+								header="#{labels.kullanicilar}" 
+								height="260"
+								widgetVar="kullanici_islem_dialog" 
+								iptalAction="#{kullaniciController.iptal}" 
+								iptalUpdate="kullanici_form:tablo_panel" 
+								kaydetAction="#{kullaniciController.kaydet('kullanici_islem_dialog')}" 
+								kaydetUpdate="kullanici_form,messages">
+
+					<p:outputLabel	value="#{labels.tc_kimlik_no}" styleClass="koyu" indicateRequired="#{true}" />
+					<algan:tckn	value="#{kullaniciController.secilen.tc_kimlik_no}" 
+								required="#{true}" 
+								requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.tc_kimlik_no, labels.zorunlu_alan_mesaji)}" 
+								/>
+
+					<p:outputLabel	value="#{labels.kullanici_adi}" styleClass="koyu" indicateRequired="#{true}" />
+					<algan:inputText	placeholder="#{labels.kullanici_adi}" 
+										value="#{kullaniciController.secilen.kullanici_adi}" 
+										required="#{true}" 
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.kullanici_adi, labels.zorunlu_alan_mesaji)}" 
+										/>
+
+					<p:outputLabel	value="#{labels.ad}" styleClass="koyu" indicateRequired="#{true}" />
+					<algan:inputText	placeholder="#{labels.ad}" 
+										value="#{kullaniciController.secilen.ad}" 
+										required="#{true}" 
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.ad, labels.zorunlu_alan_mesaji)}" 
+										/>
+
+					<p:outputLabel	value="#{labels.soyad}" styleClass="koyu" indicateRequired="#{true}" />
+					<algan:inputText	placeholder="#{labels.soyad}" 
+										value="#{kullaniciController.secilen.soyad}" 
+										required="#{true}" 
+										requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.soyad, labels.zorunlu_alan_mesaji)}" 
+										/>
+
+					<p:outputLabel	value="#{labels.cinsiyet}" styleClass="koyu" indicateRequired="#{true}" />
+					<algan:radio	value="#{kullaniciController.secilen.cinsiyet}" 
+									store="#{storeController.cinsiyetStore}" 
+									required="#{true}" 
+									requiredMessage="#{hataKodlariController.hataMesajiGetir(1, labels.cinsiyet, labels.zorunlu_alan_mesaji)}" 
+									/>
+
+					<p:outputLabel	value="#{labels.dogum_tarihi}" styleClass="koyu" indicateRequired="false" />
+					<algan:tarih	placeholder="#{labels.dogum_tarihi}" 
+									value="#{kullaniciController.secilen.dogum_tarihi}" 
+									/>
+
+					<p:outputLabel	value="#{labels.parola}" styleClass="koyu" indicateRequired="false" />
+					<algan:inputText	placeholder="#{labels.parola}" 
+										value="#{kullaniciController.secilen.parola}" 
+										/>
+
+				</algan:crudForm>
+
+				<p:panel id="kullaniciIletisimPanel" styleClass="panel-noborder">
+					<ui:include src="/kullanici/kullaniciIletisimCrud.xhtml" />
+				</p:panel>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

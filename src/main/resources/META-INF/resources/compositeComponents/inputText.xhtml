@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:composite="http://java.sun.com/jsf/composite"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+	<composite:interface>
+		<composite:attribute name="disabled" default="#{false}" />
+		<composite:attribute name="placeholder" />
+		<composite:attribute name="ptDataTooltip" />
+		<composite:attribute name="readonly" default="#{false}" />
+		<composite:attribute name="required" default="#{false}" />
+		<composite:attribute name="requiredMessage" default="" />
+		<composite:attribute name="rendered" default="#{true}" />
+		<composite:attribute name="styleClass" />
+		<composite:attribute name="tabindex" />
+		<composite:attribute name="value" required="#{true}" />
+	</composite:interface>
+	
+	<composite:implementation>
+		<p:inputText	placeholder="#{cc.attrs.placeholder}" 
+						value="#{cc.attrs.value}" 
+						styleClass="#{cc.attrs.styleClass}" 
+						disabled="#{cc.attrs.disabled}" 
+						readonly="#{cc.attrs.readonly}" 
+						rendered="#{cc.attrs.rendered}" 
+						tabindex="#{cc.attrs.tabindex}" 
+						pt:data-tooltip="#{cc.attrs.ptDataTooltip}"
+						required="#{cc.attrs.required}" 
+						requiredMessage="#{cc.attrs.requiredMessage}" 
+		/>
+	</composite:implementation>
+</html>

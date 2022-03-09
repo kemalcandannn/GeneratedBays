@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+    </f:facet>
+    <title>PrimeFaces Paradise</title>
+</h:head>
+
+<h:body styleClass="login-body">
+    <h:form>
+        <div class="login-panel ui-fluid">
+            <div class="p-grid p-nogutter">
+                <div class="p-col-12 logo-container">
+                    <p:graphicImage name="images/logo-gray.png" library="paradise-layout" styleClass="logo"/>
+                    <p:graphicImage name="images/login/icon-login.png" library="paradise-layout"
+                                    styleClass="login-icon"/>
+                    <h2>Welcome to Paradise</h2>
+                </div>
+                <div class="p-col-12">
+                    <p:outputLabel for="j_username" value="Kullanıcı Adı"/>
+                    <div class="input-wrapper">
+                        <p:inputText id="j_username" placeholder="Kullanıcı Adı" autocomplete="off" pt:data-tooltip="Kullanıcı Adınızı Giriniz" required="true">
+							 <f:validateRequired />
+						</p:inputText>
+                        <p:graphicImage name="images/login/user.png" library="paradise-layout" styleClass="user-icon"/>
+                    </div>
+                </div>
+                <div class="p-col-12">
+                    <p:outputLabel for="j_password" value="Parola"/>
+                    <div class="input-wrapper">
+						<p:password required="true" id="j_password" placeholder="Parola" autocomplete="off" feedback="false" pt:data-tooltip="Parolanızı Giriniz">
+							 <f:validateRequired />
+						</p:password>
+                        <p:graphicImage name="images/login/lock.png" library="paradise-layout" styleClass="lock-icon"/>
+                    </div>
+                </div>
+                <div class="p-col-12 chkbox-container">
+                    <a href="">Parolanızı mı unuttunuz?</a>
+                </div>
+
+										<h:panelGroup layout="block" rendered="${!empty param and !param['gecersizKulCaptchasizError']}">
+											<div class="ui-g-12 padding0" >
+											<p:graphicImage id="captchaImage" styleClass="showCaptcha" alt="captcha" value="/captcha-servlet"/>
+											<a href="#"><i id="captchaRef" class="pi pi-refresh showCaptcha fontSizeIkiBucumEm"></i></a>
+											</div>
+										</h:panelGroup>
+										
+										<h:panelGroup layout="block" rendered="${!empty param and !param['gecersizKulCaptchasizError']}">
+											<div class="ui-g-12 paddingTop0">
+											<p:inputText styleClass="showCaptcha textAlingCenter" id="j_bilgi" placeholder="Resimdeki Bilgiyi Giriniz" autocomplete="off" />
+											</div>
+										</h:panelGroup>
+
+                <div class="p-col-12 button-container">
+                    <p:commandButton id="loginButton" icon="fa fa-sign-in" value="Giriş" styleClass="ui-button-info ui-button-raised" rendered="${!empty param}" update="loginForm" ajax="false">
+                    	<f:param name="captcha" value="1" />
+                    </p:commandButton>
+                    <p:commandButton id="loginButton2" icon="fa fa-sign-in" value="Giriş" styleClass="ui-button-info ui-button-raised" rendered="${empty param}" update="loginForm" ajax="false" />
+                </div>
+            </div>
+        </div>
+    </h:form>
+</h:body>
+<h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
+<h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
+<h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout"/>
+
+</html>

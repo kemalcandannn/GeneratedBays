@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:composite="http://java.sun.com/jsf/composite"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents">
+
+	<composite:interface>
+		<composite:attribute name="clearAction" method-signature="void action()" />
+		<composite:attribute name="form" required="#{true}" />
+		<composite:attribute name="rendered" default="#{false}" />
+	</composite:interface>
+	
+	<composite:implementation>
+		<p:accordionPanel	activeIndex="-1" 
+							rendered="#{cc.attrs.rendered}">
+	
+			<p:tab title="#{labels.detayli_arama}">
+				<p:panelGrid	columns="4" 
+								columnClasses="ui-g-12 ui-md-2 saga_yasla,ui-g-12 ui-md-4 sola_yasla,ui-g-12 ui-md-2 saga_yasla,ui-g-12 ui-md-4 sola_yasla" 
+								layout="grid" 
+								styleClass="ui-panelgrid-blank ui-fluid">
+								
+					<composite:insertChildren />
+	
+				</p:panelGrid>
+	
+				<div class="ortala" style="border-top: 1px solid #d8d8d8; padding-top:5px;">
+	
+					<algan:sorgulaButon	update="#{cc.attrs.form}:tablo_panel" 
+										/>
+										
+					<algan:temizleButon	action="#{cc.attrs.clearAction}" 
+										update="#{cc.attrs.form}" 
+										/>
+	
+				</div>
+			</p:tab>
+		</p:accordionPanel>
+	</composite:implementation>
+</html>

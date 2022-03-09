@@ -1,0 +1,154 @@
+.saga_yasla {
+	text-align: right !important;
+}
+
+.sola_yasla {
+	text-align: left !important;
+}
+
+.ortala {
+	text-align: center !important;
+}
+
+.koyu {
+	font-weight: bold !important;
+}
+
+.marginRight2 {
+	margin-right: 2px !important;
+}
+
+.gorunur {
+	display: initial;
+}
+
+.gorunmez {
+	display: none;
+}
+
+.ui-panelgrid .p-grid .ui-panelgrid-cell, .ui-panelgrid .ui-grid-responsive .ui-panelgrid-cell {
+    align-self: center;
+}
+
+.layout-wrapper .layout-main .layout-content {
+    padding: 0px;
+}
+
+.panel-noborder {
+    border: none !important;
+}
+.panel-noborder > div:first-child{
+	padding: 0px !important;
+	border: none !important;
+}
+
+/*LOGIN BASLANGIC*/
+#page {
+	margin-top: 100px;
+	max-width: 1260px!important;
+    min-height: 10em!important;
+    height: 600px!important;
+    background: #FFF!important;
+    -webkit-box-sizing: border-box!important;
+    box-sizing: border-box!important;
+    -webkit-box-shadow: 0 0.4em 0.5em rgba(33,78,103,.2)!important;
+    box-shadow: 0 0.4em 0.5em rgba(33,78,103,.2)!important;
+    border-radius: 10px!important;
+	border-top-right-radius: 0px!important; 
+	border-bottom-right-radius: 0px!important; 
+}
+
+.uyariMesaji {
+	color:white; background-color: red; padding:10px; border-radius: 5px;
+}
+
+.login_bilgi {
+	margin-bottom: 0px !important;
+	font-size: small !important;
+	max-width: 336px !important;
+}
+
+.loginError {
+	margin-left: 7px;
+	color: #ff0000;
+	background-color: #00ffff;
+}
+
+.loginStyleClass {
+	width: 60%; 
+	margin:auto; 
+	background-image: none; 
+	background: radial-gradient(circle farthest-corner at center,rgba(58,137,180,0) 0,rgba(58,137,180,.8) 100%),#FFF; 
+	display: flex; 
+	align-items: center;
+}
+.imageStyle {
+		background-color: #c2e0f1!important; 
+		height: 601px!important; 
+		padding-left: 30px!important; 
+		display: flex!important; 
+		align-items: center!important; 
+		border-radius: 10px!important; 
+		border-top-left-radius: 0px!important; 
+		border-bottom-left-radius: 0px!important; 
+}
+.progressBarStyle {
+	height:6px!important; display: none; 
+/* 	z-index: 1000; */
+}
+.paddingTop120{
+	padding-top: 120px!important;
+}
+.graphicImageStyle {
+	width: 94%!important; 
+	height: auto!important;
+}
+.padding0 {
+	padding: 0px!important;
+}
+.fontSizeIkiBucuk {
+	font-size: 2.5em!important;
+}
+.paddingTop120 {
+	padding-top: 120px;
+} 
+.fontSize16 {
+	font-size: 16px;
+}
+.fontSizeIkiBucumEm {
+	font-size: 2.5em;
+}
+.paddingTop0 {
+	padding-top: 0px;
+}
+
+.borderRight0 {
+	border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+}
+
+.borderLeft0 {
+	border-top-left-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+}
+
+.marginRight5 {
+	margin-right: 5px !important;
+}
+
+.marginLeft0 {
+	margin-left: 0px !important;
+}
+
+.parolamiUnuttumButton {
+	padding: 0.5rem 1rem 0.5rem 2rem;
+	background: #3984b8;
+	color: #ffffff !important;
+	border: 1px solid #3984b8;
+	margin: 0;
+	outline: 0 none;
+	border-radius: 4px;
+	transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+/*LOGIN BITIS*/

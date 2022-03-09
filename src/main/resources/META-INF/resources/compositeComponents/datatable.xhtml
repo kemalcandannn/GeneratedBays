@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:composite="http://java.sun.com/jsf/composite"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents">
+
+	<composite:interface>
+		<composite:attribute name="cellEditAction" method-signature="void action(org.primefaces.event.CellEditEvent)" />
+		<composite:attribute name="cellEditUpdate" />
+		<composite:attribute name="currentPageReportTemplate" default="{totalRecords} Kayıttan {startRecord}-{endRecord} Arası" />
+		<composite:attribute name="draggableColumns" default="#{true}" />
+		<composite:attribute name="editable" default="#{true}" />
+		<composite:attribute name="editInitEvent" default="dblclick" />
+		<composite:attribute name="editMode" default="cell" />
+		<composite:attribute name="emptyMessage" default="#{labels.kayit_bulunamadi}" />
+		<composite:attribute name="id" />
+		<composite:attribute name="lazy" default="#{true}" />
+		<composite:attribute name="paginator" default="#{true}" />
+		<composite:attribute name="paginatorPosition" default="bottom" />
+		<composite:attribute name="paginatorTemplate" default="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" />
+		<composite:attribute name="reflow" default="#{true}" />
+		<composite:attribute name="rowKey" default="#{item.id}" />
+		<composite:attribute name="rows" default="10" />
+		<composite:attribute name="rowSelectMode" default="add" />
+		<composite:attribute name="rowSelectUpdate" />
+		<composite:attribute name="rowsPerPageTemplate" default="10, 20, 50, 100, {ShowAll|'Tümü'}" />
+		<composite:attribute name="rowStyleClass" />
+		<composite:attribute name="selection" required="#{true}" />
+		<composite:attribute name="value" type="org.primefaces.model.LazyDataModel" required="#{true}" />
+	</composite:interface>
+	
+	<composite:implementation>
+		<p:dataTable	id="#{cc.attrs.id}" 
+						rowKey="#{cc.attrs.rowKey}" 
+						var="item" 
+						value="#{cc.attrs.value}" 
+						selection="#{cc.attrs.selection}" 
+						editable="#{cc.attrs.editable}" 
+						editMode="#{cc.attrs.editMode}" 
+						editInitEvent="#{cc.attrs.editInitEvent}" 
+						emptyMessage="#{cc.attrs.emptyMessage}" 
+						rows="#{cc.attrs.rows}" 
+						rowsPerPageTemplate="#{cc.attrs.rowsPerPageTemplate}" 
+						rowSelectMode="#{cc.attrs.rowSelectMode}" 
+						rowStyleClass="#{cc.attrs.rowStyleClass}" 
+						paginator="#{cc.attrs.paginator}" 
+						paginatorPosition="#{cc.attrs.paginatorPosition}" 
+						paginatorTemplate="#{cc.attrs.paginatorTemplate}" 
+						lazy="#{cc.attrs.lazy}" 
+						reflow="#{cc.attrs.reflow}" 
+						draggableColumns="#{cc.attrs.draggableColumns}" 
+						currentPageReportTemplate="#{cc.attrs.currentPageReportTemplate}">
+	
+			<composite:insertFacet name="header" />
+	
+			<p:ajax event="cellEdit" listener="#{cc.attrs.cellEditAction}" update="#{cc.attrs.cellEditUpdate}" />
+			<p:ajax event="rowSelect" update="#{cc.attrs.rowSelectUpdate}" />
+			<p:ajax event="rowUnselect" update="#{cc.attrs.rowSelectUpdate}" />
+			<p:ajax event="rowSelectCheckbox" update="#{cc.attrs.rowSelectUpdate}" />
+			<p:ajax event="rowUnselectCheckbox" update="#{cc.attrs.rowSelectUpdate}" />
+			<p:ajax event="toggleSelect" update="#{cc.attrs.rowSelectUpdate}" />
+	
+			<p:column selectionMode="multiple" exportable="false" width="15" resizable="false" />
+	
+			<composite:insertChildren />
+	
+			<composite:insertFacet name="footer" />
+	
+		</p:dataTable>
+	</composite:implementation>
+</html>

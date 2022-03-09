@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:composite="http://java.sun.com/jsf/composite"
+		xmlns:p="http://primefaces.org/ui"
+		xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+		xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+		xmlns:algan="http://java.sun.com/jsf/composite/compositeComponents">
+
+	<composite:interface>
+		<composite:attribute name="header" default="" />
+		<composite:attribute name="height" default="300" />
+		<composite:attribute name="id" required="#{true}" />
+		<composite:attribute name="iptalAction" method-signature="void action()" />
+		<composite:attribute name="iptalUpdate" />
+		<composite:attribute name="kaydetAction" method-signature="void action()" />
+		<composite:attribute name="kaydetUpdate" />
+		<composite:attribute name="widgetVar" />
+		<composite:attribute name="width" default="900" />
+	</composite:interface>
+	
+	<composite:implementation>
+	
+		<p:dialog	header="#{cc.attrs.header}" 
+					widgetVar="#{cc.attrs.widgetVar}" 
+					height="#{cc.attrs.height}"
+					width="#{cc.attrs.width}" 
+					showEffect="fade" 
+					hideEffect="fade" 
+					minimizable="#{true}" 
+					maximizable="#{true}" 
+					modal="#{true}">
+
+			<h:form	id="crud_form">
+				<p:panel styleClass="noborder">
+					<p:panelGrid	columns="4" 
+									columnClasses="ui-g-12 ui-md-2 saga_yasla,ui-g-12 ui-md-4 sola_yasla,ui-g-12 ui-md-2 saga_yasla,ui-g-12 ui-md-4 sola_yasla" 
+									layout="grid" 
+									styleClass="ui-panelgrid-blank ui-fluid margin_bottom_10">
+
+						<composite:insertChildren />
+
+					</p:panelGrid>
+	
+					<f:facet name="footer">
+						<div id="deneme" class="ortala">
+
+							<algan:kaydetButon	action="#{cc.attrs.kaydetAction}" 
+												update="#{cc.attrs.id}:crud_form,#{cc.attrs.kaydetUpdate}" 
+												/>
+	
+							<algan:iptalButon	action="#{cc.attrs.iptalAction}" 
+												oncomplete="PF('#{cc.attrs.id}').hide()" 
+												update="#{cc.attrs.iptalUpdate}" 
+												/>
+	
+							<p:hotkey bind="f5" process="@this" update="#{cc.attrs.id}:crud_form">
+								<p:resetInput target="#{cc.attrs.id}:crud_form" />
+							</p:hotkey>
+						</div>
+					</f:facet>
+				</p:panel>
+	
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+			</h:form>
+		</p:dialog>
+	</composite:implementation>
+</html>
