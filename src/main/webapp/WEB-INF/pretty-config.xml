@@ -3,61 +3,61 @@
 				xsi:schemaLocation="http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd 
 									http://ocpsoft.org/schema/rewrite-config-prettyfaces">
 
-	<url-mapping id="dbLog"><pattern value="/sistem" /><view-id value="/sistem/dbLogCrud.xhtml" /></url-mapping>
-	<url-mapping id="birim"><pattern value="/teskilat" /><view-id value="/teskilat/birimCrud.xhtml" /></url-mapping>
-	<url-mapping id="kullanici"><pattern value="/teskilat" /><view-id value="/teskilat/kullaniciCrud.xhtml" /></url-mapping>
+	<url-mapping id="dbLog"><pattern value="/dbLog" /><view-id value="/sistem/dbLogCrud.xhtml" /></url-mapping>
+	<url-mapping id="birim"><pattern value="/birim" /><view-id value="/teskilat/birimCrud.xhtml" /></url-mapping>
+	<url-mapping id="kullanici"><pattern value="/kullanici" /><view-id value="/teskilat/kullaniciCrud.xhtml" /></url-mapping>
 	<url-mapping id="depo"><pattern value="/depo" /><view-id value="/depo/depoCrud.xhtml" /></url-mapping>
-	<url-mapping id="klasorTarihceLog"><pattern value="/loglama" /><view-id value="/loglama/klasorTarihceLogCrud.xhtml" /></url-mapping>
+	<url-mapping id="klasorTarihceLog"><pattern value="/klasorTarihceLog" /><view-id value="/loglama/klasorTarihceLogCrud.xhtml" /></url-mapping>
 	<url-mapping id="gomlek"><pattern value="/gomlek" /><view-id value="/gomlek/gomlekCrud.xhtml" /></url-mapping>
 	<url-mapping id="defter"><pattern value="/defter" /><view-id value="/defter/defterCrud.xhtml" /></url-mapping>
-	<url-mapping id="gomlekTarihceLog"><pattern value="/loglama" /><view-id value="/loglama/gomlekTarihceLogCrud.xhtml" /></url-mapping>
-	<url-mapping id="defterTarihceLog"><pattern value="/loglama" /><view-id value="/loglama/defterTarihceLogCrud.xhtml" /></url-mapping>
-	<url-mapping id="defterSayfaTarihceLog"><pattern value="/loglama" /><view-id value="/loglama/defterSayfaTarihceLogCrud.xhtml" /></url-mapping>
-	<url-mapping id="defterAlan"><pattern value="/defter" /><view-id value="/defter/defterAlanCrud.xhtml" /></url-mapping>
-	<url-mapping id="defterSayfaAlan"><pattern value="/defter" /><view-id value="/defter/defterSayfaAlanCrud.xhtml" /></url-mapping>
-	<url-mapping id="arsivMateryaliAlan"><pattern value="/arsivMateryali" /><view-id value="/arsivMateryali/arsivMateryaliAlanCrud.xhtml" /></url-mapping>
+	<url-mapping id="gomlekTarihceLog"><pattern value="/gomlekTarihceLog" /><view-id value="/loglama/gomlekTarihceLogCrud.xhtml" /></url-mapping>
+	<url-mapping id="defterTarihceLog"><pattern value="/defterTarihceLog" /><view-id value="/loglama/defterTarihceLogCrud.xhtml" /></url-mapping>
+	<url-mapping id="defterSayfaTarihceLog"><pattern value="/defterSayfaTarihceLog" /><view-id value="/loglama/defterSayfaTarihceLogCrud.xhtml" /></url-mapping>
+	<url-mapping id="defterAlan"><pattern value="/defterAlan" /><view-id value="/defter/defterAlanCrud.xhtml" /></url-mapping>
+	<url-mapping id="defterSayfaAlan"><pattern value="/defterSayfaAlan" /><view-id value="/defter/defterSayfaAlanCrud.xhtml" /></url-mapping>
+	<url-mapping id="arsivMateryaliAlan"><pattern value="/arsivMateryaliAlan" /><view-id value="/arsivMateryali/arsivMateryaliAlanCrud.xhtml" /></url-mapping>
 	<url-mapping id="arsivMateryali"><pattern value="/arsivMateryali" /><view-id value="/arsivMateryali/arsivMateryaliCrud.xhtml" /></url-mapping>
 	<url-mapping id="depoTalep"><pattern value="/depoTalep" /><view-id value="/depoTalep/depoTalepCrud.xhtml" /></url-mapping>
-	<url-mapping id="depoTalepTarihceLog"><pattern value="/depoTalep" /><view-id value="/depoTalep/depoTalepTarihceLogCrud.xhtml" /></url-mapping>
-	<url-mapping id="depoKullanici"><pattern value="/depo" /><view-id value="/depo/depoKullaniciCrud.xhtml" /></url-mapping>
-	<url-mapping id="topluTasima"><pattern value="/depoMuhafaza" /><view-id value="/depoMuhafaza/topluTasimaCrud.xhtml" /></url-mapping>
-	<url-mapping id="hamEvrakBirim"><pattern value="/hamEvrak" /><view-id value="/hamEvrak/hamEvrakBirimCrud.xhtml" /></url-mapping>
-	<url-mapping id="arsivKurumu"><pattern value="/teskilat" /><view-id value="/teskilat/arsivKurumuCrud.xhtml" /></url-mapping>
-	<url-mapping id="arsivKurumuAlan"><pattern value="/teskilat" /><view-id value="/teskilat/arsivKurumuAlanCrud.xhtml" /></url-mapping>
+	<url-mapping id="depoTalepTarihceLog"><pattern value="/depoTalepTarihceLog" /><view-id value="/depoTalep/depoTalepTarihceLogCrud.xhtml" /></url-mapping>
+	<url-mapping id="depoKullanici"><pattern value="/depoKullanici" /><view-id value="/depo/depoKullaniciCrud.xhtml" /></url-mapping>
+	<url-mapping id="topluTasima"><pattern value="/topluTasima" /><view-id value="/depoMuhafaza/topluTasimaCrud.xhtml" /></url-mapping>
+	<url-mapping id="hamEvrakBirim"><pattern value="/hamEvrakBirim" /><view-id value="/hamEvrak/hamEvrakBirimCrud.xhtml" /></url-mapping>
+	<url-mapping id="arsivKurumu"><pattern value="/arsivKurumu" /><view-id value="/teskilat/arsivKurumuCrud.xhtml" /></url-mapping>
+	<url-mapping id="arsivKurumuAlan"><pattern value="/arsivKurumuAlan" /><view-id value="/teskilat/arsivKurumuAlanCrud.xhtml" /></url-mapping>
 	<url-mapping id="fon"><pattern value="/fon" /><view-id value="/fon/fonCrud.xhtml" /></url-mapping>
-	<url-mapping id="rol"><pattern value="/genel" /><view-id value="/genel/rolCrud.xhtml" /></url-mapping>
-	<url-mapping id="rolIslem"><pattern value="/genel" /><view-id value="/genel/rolIslemCrud.xhtml" /></url-mapping>
-	<url-mapping id="kullaniciRol"><pattern value="/teskilat" /><view-id value="/teskilat/kullaniciRolCrud.xhtml" /></url-mapping>
-	<url-mapping id="islem"><pattern value="/genel" /><view-id value="/genel/islemCrud.xhtml" /></url-mapping>
+	<url-mapping id="rol"><pattern value="/rol" /><view-id value="/genel/rolCrud.xhtml" /></url-mapping>
+	<url-mapping id="rolIslem"><pattern value="/rolIslem" /><view-id value="/genel/rolIslemCrud.xhtml" /></url-mapping>
+	<url-mapping id="kullaniciRol"><pattern value="/kullaniciRol" /><view-id value="/teskilat/kullaniciRolCrud.xhtml" /></url-mapping>
+	<url-mapping id="islem"><pattern value="/islem" /><view-id value="/genel/islemCrud.xhtml" /></url-mapping>
 	<url-mapping id="sozluk"><pattern value="/sozluk" /><view-id value="/sozluk/sozlukCrud.xhtml" /></url-mapping>
-	<url-mapping id="sozlukMadde"><pattern value="/sozluk" /><view-id value="/sozluk/sozlukMaddeCrud.xhtml" /></url-mapping>
-	<url-mapping id="arsivSahibiPersonelOnayLog"><pattern value="/loglama" /><view-id value="/loglama/arsivSahibiPersonelOnayLogCrud.xhtml" /></url-mapping>
-	<url-mapping id="fonOnculVeriLog"><pattern value="/fon" /><view-id value="/fon/fonOnculVeriLogCrud.xhtml" /></url-mapping>
-	<url-mapping id="gomlekBakim"><pattern value="/depoMuhafaza" /><view-id value="/depoMuhafaza/gomlekBakimCrud.xhtml" /></url-mapping>
-	<url-mapping id="calismaGrubuUye"><pattern value="/calismaGrubu" /><view-id value="/calismaGrubu/calismaGrubuUyeCrud.xhtml" /></url-mapping>
-	<url-mapping id="depoIciTasima"><pattern value="/hamEvrak" /><view-id value="/hamEvrak/depoIciTasimaCrud.xhtml" /></url-mapping>
-	<url-mapping id="kullaniciHesap"><pattern value="/teskilat" /><view-id value="/teskilat/kullaniciHesapCrud.xhtml" /></url-mapping>
-	<url-mapping id="metadataSeti"><pattern value="/metadata" /><view-id value="/metadata/metadataSetiCrud.xhtml" /></url-mapping>
-	<url-mapping id="alan"><pattern value="/metadata" /><view-id value="/metadata/alanCrud.xhtml" /></url-mapping>
-	<url-mapping id="fonMetadataSeti"><pattern value="/fon" /><view-id value="/fon/fonMetadataSetiCrud.xhtml" /></url-mapping>
-	<url-mapping id="fonAlan"><pattern value="/fon" /><view-id value="/fon/fonAlanCrud.xhtml" /></url-mapping>
-	<url-mapping id="klasorAlan"><pattern value="/klasor" /><view-id value="/klasor/klasorAlanCrud.xhtml" /></url-mapping>
-	<url-mapping id="gomlekAlan"><pattern value="/gomlek" /><view-id value="/gomlek/gomlekAlanCrud.xhtml" /></url-mapping>
-	<url-mapping id="islenmemisKlasorAlan"><pattern value="/arsivMateryali" /><view-id value="/arsivMateryali/islenmemisKlasorAlanCrud.xhtml" /></url-mapping>
-	<url-mapping id="depoAlan"><pattern value="/depo" /><view-id value="/depo/depoAlanCrud.xhtml" /></url-mapping>
+	<url-mapping id="sozlukMadde"><pattern value="/sozlukMadde" /><view-id value="/sozluk/sozlukMaddeCrud.xhtml" /></url-mapping>
+	<url-mapping id="arsivSahibiPersonelOnayLog"><pattern value="/arsivSahibiPersonelOnayLog" /><view-id value="/loglama/arsivSahibiPersonelOnayLogCrud.xhtml" /></url-mapping>
+	<url-mapping id="fonOnculVeriLog"><pattern value="/fonOnculVeriLog" /><view-id value="/fon/fonOnculVeriLogCrud.xhtml" /></url-mapping>
+	<url-mapping id="gomlekBakim"><pattern value="/gomlekBakim" /><view-id value="/depoMuhafaza/gomlekBakimCrud.xhtml" /></url-mapping>
+	<url-mapping id="calismaGrubuUye"><pattern value="/calismaGrubuUye" /><view-id value="/calismaGrubu/calismaGrubuUyeCrud.xhtml" /></url-mapping>
+	<url-mapping id="depoIciTasima"><pattern value="/depoIciTasima" /><view-id value="/hamEvrak/depoIciTasimaCrud.xhtml" /></url-mapping>
+	<url-mapping id="kullaniciHesap"><pattern value="/kullaniciHesap" /><view-id value="/teskilat/kullaniciHesapCrud.xhtml" /></url-mapping>
+	<url-mapping id="metadataSeti"><pattern value="/metadataSeti" /><view-id value="/metadata/metadataSetiCrud.xhtml" /></url-mapping>
+	<url-mapping id="alan"><pattern value="/alan" /><view-id value="/metadata/alanCrud.xhtml" /></url-mapping>
+	<url-mapping id="fonMetadataSeti"><pattern value="/fonMetadataSeti" /><view-id value="/fon/fonMetadataSetiCrud.xhtml" /></url-mapping>
+	<url-mapping id="fonAlan"><pattern value="/fonAlan" /><view-id value="/fon/fonAlanCrud.xhtml" /></url-mapping>
+	<url-mapping id="klasorAlan"><pattern value="/klasorAlan" /><view-id value="/klasor/klasorAlanCrud.xhtml" /></url-mapping>
+	<url-mapping id="gomlekAlan"><pattern value="/gomlekAlan" /><view-id value="/gomlek/gomlekAlanCrud.xhtml" /></url-mapping>
+	<url-mapping id="islenmemisKlasorAlan"><pattern value="/islenmemisKlasorAlan" /><view-id value="/arsivMateryali/islenmemisKlasorAlanCrud.xhtml" /></url-mapping>
+	<url-mapping id="depoAlan"><pattern value="/depoAlan" /><view-id value="/depo/depoAlanCrud.xhtml" /></url-mapping>
 	<url-mapping id="arsivSahibi"><pattern value="/arsivSahibi" /><view-id value="/arsivSahibi/arsivSahibiCrud.xhtml" /></url-mapping>
-	<url-mapping id="arsivSahibiPersonel"><pattern value="/arsivSahibi" /><view-id value="/arsivSahibi/arsivSahibiPersonelCrud.xhtml" /></url-mapping>
-	<url-mapping id="personelHesapBilgileri"><pattern value="/arsivSahibi" /><view-id value="/arsivSahibi/personelHesapBilgileriCrud.xhtml" /></url-mapping>
+	<url-mapping id="arsivSahibiPersonel"><pattern value="/arsivSahibiPersonel" /><view-id value="/arsivSahibi/arsivSahibiPersonelCrud.xhtml" /></url-mapping>
+	<url-mapping id="personelHesapBilgileri"><pattern value="/personelHesapBilgileri" /><view-id value="/arsivSahibi/personelHesapBilgileriCrud.xhtml" /></url-mapping>
 	<url-mapping id="klasor"><pattern value="/klasor" /><view-id value="/klasor/klasorCrud.xhtml" /></url-mapping>
-	<url-mapping id="islenmemisKlasor"><pattern value="/arsivMateryali" /><view-id value="/arsivMateryali/islenmemisKlasorCrud.xhtml" /></url-mapping>
+	<url-mapping id="islenmemisKlasor"><pattern value="/islenmemisKlasor" /><view-id value="/arsivMateryali/islenmemisKlasorCrud.xhtml" /></url-mapping>
 	<url-mapping id="calismaGrubu"><pattern value="/calismaGrubu" /><view-id value="/calismaGrubu/calismaGrubuCrud.xhtml" /></url-mapping>
 	<url-mapping id="hamEvrak"><pattern value="/hamEvrak" /><view-id value="/hamEvrak/hamEvrakCrud.xhtml" /></url-mapping>
-	<url-mapping id="klasorEnvanter"><pattern value="/klasor" /><view-id value="/klasor/klasorEnvanterCrud.xhtml" /></url-mapping>
-	<url-mapping id="depoTalepMalzeme"><pattern value="/depoTalep" /><view-id value="/depoTalep/depoTalepMalzemeCrud.xhtml" /></url-mapping>
-	<url-mapping id="topluTasimaMalzeme"><pattern value="/depoMuhafaza" /><view-id value="/depoMuhafaza/topluTasimaMalzemeCrud.xhtml" /></url-mapping>
-	<url-mapping id="gomlekBakimKlasor"><pattern value="/depoMuhafaza" /><view-id value="/depoMuhafaza/gomlekBakimKlasorCrud.xhtml" /></url-mapping>
-	<url-mapping id="gomlekEnvanter"><pattern value="/gomlek" /><view-id value="/gomlek/gomlekEnvanterCrud.xhtml" /></url-mapping>
-	<url-mapping id="defterSayfa"><pattern value="/defter" /><view-id value="/defter/defterSayfaCrud.xhtml" /></url-mapping>
+	<url-mapping id="klasorEnvanter"><pattern value="/klasorEnvanter" /><view-id value="/klasor/klasorEnvanterCrud.xhtml" /></url-mapping>
+	<url-mapping id="depoTalepMalzeme"><pattern value="/depoTalepMalzeme" /><view-id value="/depoTalep/depoTalepMalzemeCrud.xhtml" /></url-mapping>
+	<url-mapping id="topluTasimaMalzeme"><pattern value="/topluTasimaMalzeme" /><view-id value="/depoMuhafaza/topluTasimaMalzemeCrud.xhtml" /></url-mapping>
+	<url-mapping id="gomlekBakimKlasor"><pattern value="/gomlekBakimKlasor" /><view-id value="/depoMuhafaza/gomlekBakimKlasorCrud.xhtml" /></url-mapping>
+	<url-mapping id="gomlekEnvanter"><pattern value="/gomlekEnvanter" /><view-id value="/gomlek/gomlekEnvanterCrud.xhtml" /></url-mapping>
+	<url-mapping id="defterSayfa"><pattern value="/defterSayfa" /><view-id value="/defter/defterSayfaCrud.xhtml" /></url-mapping>
 
 	<url-mapping id="login">
 		<pattern value="/login" />

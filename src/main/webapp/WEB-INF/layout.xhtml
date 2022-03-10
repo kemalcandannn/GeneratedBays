@@ -57,6 +57,18 @@
         </f:facet>
     </p:ajaxStatus>
     <div class="layout-mask modal-in"></div>
+    
+	<h:form>
+	    <p:confirmDialog global="true" closeOnEscape="true" showEffect="fade" hideEffect="fade">
+	        <p:commandButton id="evet" value="#{labels.evet}" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+	        <p:commandButton id="hayir" value="#{labels.hayir}" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times">
+	        	<f:ajax onevent="loadingKapat" />
+	        </p:commandButton>
+	    </p:confirmDialog>
+		
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	</h:form>
+    
     <h:outputStylesheet name="css/primeicons.css" library="paradise-layout"/>
     <h:outputStylesheet name="css/primeflex.min.css" library="paradise-layout"/>
     <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="paradise-layout"/>
