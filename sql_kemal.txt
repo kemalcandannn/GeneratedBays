@@ -2,6 +2,8 @@
 --------------------------------------------------------------- 09/03/2022 17:08 ---------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
+alter table db_log rename db_log_pk to id;
+
 alter table db_log add column version Bigint not null default 0;
 alter table birim add column version Bigint not null default 0;
 alter table kullanici add column version Bigint not null default 0;
@@ -57,5 +59,3 @@ alter table toplu_tasima_malzeme add column version Bigint not null default 0;
 alter table gomlek_bakim_klasor add column version Bigint not null default 0;
 alter table gomlek_envanter add column version Bigint not null default 0;
 alter table defter_sayfa add column version Bigint not null default 0;
-
-alter table db_log rename db_log_pk to id;
